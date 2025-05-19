@@ -1,12 +1,15 @@
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import ChatGpt from "./pages/ChatGpt";
+import { Main } from "./pages/Main";
 
-function App() {
+export default function App() {
   return (
-    <div>
-      <ChatGpt />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/chatGpt" element={<ChatGpt />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
