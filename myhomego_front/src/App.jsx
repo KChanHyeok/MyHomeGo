@@ -1,18 +1,12 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import ChatGpt from "./pages/ChatGpt";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        안녕하세요
-       </div>
-    </>
-  )
+    <div>
+      <ChatGpt />
+    </div>
+  );
 }
 
-export default App
+export default App;
