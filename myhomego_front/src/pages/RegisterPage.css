@@ -4,9 +4,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: 100vh;
-  background-color: #fdfdfd;
+  width: 100%;
+  background-image: url("/images/backgroundImg3.png"); /* public 기준 경로 */
+  background-size: cover;        /* 꽉 차게 */
+  background-position: center;   /* 가운데 정렬 */
+  background-repeat: no-repeat;  /* 반복 없음 */
+  justify-content: center;
 }
 
 h2 {
