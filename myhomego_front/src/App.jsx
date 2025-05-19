@@ -1,18 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import ChatGpt from "./pages/ChatGpt";
+import MainPage from "./pages/MainPage";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <>
-      <div>
-        안녕하세요
-       </div>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/chatGpt" element={<ChatGpt />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App
