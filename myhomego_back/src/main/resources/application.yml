@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: dev # 기본은 dev (Mongo만)
+
+openai:
+  api-key: ${OPENAI_API_KEY}
+  model: gpt-4o
