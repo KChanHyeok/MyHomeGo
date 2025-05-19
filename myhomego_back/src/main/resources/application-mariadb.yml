@@ -1,0 +1,17 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/chatdb
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/chatbot?serverTimezone=UTC
+    username: your_user #To Do List
+    password: your_pw #To Do List
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
