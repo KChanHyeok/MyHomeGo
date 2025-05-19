@@ -1,0 +1,32 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f3f4f6;
+}
+
+.header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 64px;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  margin-top: 64px;
+  padding: 0 1rem;
+}
+
+.content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin-right: auto;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
