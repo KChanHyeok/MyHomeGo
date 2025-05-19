@@ -17,21 +17,21 @@ import java.time.LocalDateTime;
 public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long user_id;
+	private Long userId;
 
 	@Column(nullable =  false, unique = true)
-	private String user_email;
+	private String userEmail;
 
 	@Column(nullable =  false)
-	private String user_pwd;
+	private String userPwd;
 
 	@Column(nullable =  false)
-	private String user_name;
+	private String userName;
 
 	@Column(nullable =  false)
 	private String phone;
 
 	@Column
 	@CreatedDate
-	private LocalDateTime reg_date;
+	private LocalDateTime regDate;
 }
