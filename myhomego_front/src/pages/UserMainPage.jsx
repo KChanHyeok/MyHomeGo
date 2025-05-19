@@ -16,7 +16,7 @@ export default function MemberMainPage() {
   return (
     <div className="main-container">
       <img
-        src="/logo.png" // public 폴더에 logo.png 저장되어 있어야 함
+        src="/images/mainLogo.png" // public 폴더에 logo.png 저장되어 있어야 함
         alt="앱 로고"
         className="logo"
       />
