@@ -17,6 +17,7 @@ export default function useAnnouncementSpl(panId, params) {
         );
         setSpl({
           PAN_ID: res.data?.dsSch?.[0]?.PAN_ID,
+          dsList01: res.data[1]?.dsList01 || [],
           dsList02: res.data[1]?.dsList02 || [],
         });
       } catch (e) {

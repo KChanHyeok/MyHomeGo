@@ -1,11 +1,18 @@
 import React from 'react';
 import './AnnoucementDetail.css';
-
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 function AnnouncementDetailTable({ detail, spl }) {
   // detail이 없으면 spl을 detail처럼 활용
   const main = detail || spl;
   // spl의 특별공급 목록 예시 출력
-  console.log(spl)
   const splList = spl?.dsList02 || [];
   console.log(spl)
   return (
@@ -130,21 +137,68 @@ function AnnouncementDetailTable({ detail, spl }) {
       )}
 
       {/* spl 데이터가 있을 때 특별공급 목록 추가 출력 예시 */}
-      {splList.length > 0 && (
-        <div className="detail-section">
-          <h3 className="detail-subtitle">특별공급 목록</h3>
-          <ul>
-            {splList.map((item, idx) => (
-              <li key={idx}>
-                {/* spl의 주요 속성 출력 (예시) */}
-                {item.SPL_INF_TP_CD_NM} - {item.HSHLD_CNT}가구
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <Table>
+        <TableCaption>공급 세부내역</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[200px]">주소(DNG_HS_ADR)</TableHead>
+            <TableHead>공급호수(LTR_SPL_RMNO)</TableHead>
+            <TableHead>시군구명(CNP_NM)</TableHead>
+            <TableHead className="text-right">공급세대수(QUP_CNT)</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {splList.map((item, idx) => (
+            <TableRow key={idx}>
+              <TableCell>{item.DNG_HS_ADR}</TableCell>
+              <TableCell>{item.LTR_SPL_RMNO}</TableCell>
+              <TableCell>{item.CNP_NM}</TableCell>
+              <TableCell className="text-right">{item.QUP_CNT}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
     </div>
   );
 }
+function GroupedTable({ data }) {
+  // 1. CNP_NM(지역명)별로 그룹화
+  const grouped = data.reduce((acc, item) => {
+    if (!acc[item.CNP_NM]) acc[item.CNP_NM] = [];
+    acc[item.CNP_NM].push(item);
+    return acc;
+  }, {});
 
+  return (
+    <table className="min-w-full border">
+      <caption className="caption-top">공급 세부내역</caption>
+      <thead>
+        <tr>
+          <th className="border px-4 py-2">시군구명(CNP_NM)</th>
+          <th className="border px-4 py-2">공급호수(LTR_SPL_RMNO)</th>
+          <th className="border px-4 py-2">주소(DNG_HS_ADR)</th>
+          <th className="border px-4 py-2 text-right">공급세대수(QUP_CNT)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.entries(grouped).map(([region, items]) =>
+          items.map((item, idx) => (
+            <tr key={region + idx}>
+              {/* 첫 행에만 rowSpan 적용해서 '인천광역시' 등 지역명 한 번만 출력 */}
+              {idx === 0 && (
+                <td rowSpan={items.length} className="border px-4 py-2 font-bold align-middle bg-gray-50">
+                  {region}
+                </td>
+              )}
+              <td className="border px-4 py-2">{item.LTR_SPL_RMNO}</td>
+              <td className="border px-4 py-2">{item.DNG_HS_ADR}</td>
+              <td className="border px-4 py-2 text-right">{item.QUP_CNT}</td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  );
+}
 export default AnnouncementDetailTable;
