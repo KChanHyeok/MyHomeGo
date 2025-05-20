@@ -5,7 +5,11 @@ const Announcement = {
   CNP_CD_NM: '',      // 지역명
   AIS_TP_CD_NM: '',   // 유형명
   DTL_URL: '',        // 상세링크
-  PAN_SS: ''          // 상태
+  PAN_SS: '',          // 상태
+  SPL_INF_TP_CD: '',
+  CCR_CNNT_SYS_DS_CD: '',
+  UPP_AIS_TP_CD: '',
+  AIS_TP_CD: '',
 };
 
 const LHResponse = {

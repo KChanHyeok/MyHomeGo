@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 function AnnouncementTable(props) {
   const { announcements } = props;
   return (
@@ -20,9 +21,16 @@ function AnnouncementTable(props) {
             <td className="border px-4 py-2">{item.ANNOUNCEMENT_NO}</td>
             <td className="border px-4 py-2">{item.CNP_CD_NM}</td>
             <td className="border px-4 py-2">
-              <a href={item.DTL_URL} target="_blank" rel="noopener noreferrer">
+              <Link
+                to={`/announcement/${item.PAN_ID}`}
+                state={{
+                  SPL_INF_TP_CD: item.SPL_INF_TP_CD,
+                  CCR_CNNT_SYS_DS_CD: item.CCR_CNNT_SYS_DS_CD,
+                  UPP_AIS_TP_CD: item.UPP_AIS_TP_CD
+                }}
+              >
                 {item.PAN_NM}
-              </a>
+              </Link>
             </td>
             <td className="border px-4 py-2">{item.AIS_TP_CD_NM}</td>
             <td className="border px-4 py-2">{item.PAN_NT_ST_DT}</td>
