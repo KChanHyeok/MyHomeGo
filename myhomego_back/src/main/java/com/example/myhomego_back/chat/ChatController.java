@@ -1,11 +1,6 @@
 package com.example.myhomego_back.chat;
 
-import com.example.myhomego_back.chat.ChatMessage;
-import com.example.myhomego_back.chat.ChatMessageRepository;
-import com.example.myhomego_back.chat.ChatSession;
-import com.example.myhomego_back.chat.ChatSessionRepository;
-import com.example.myhomego_back.chat.GptResponse;
-import com.example.myhomego_back.chat.GptService;
+import com.example.myhomego_back.chat.dto.GptResponse;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

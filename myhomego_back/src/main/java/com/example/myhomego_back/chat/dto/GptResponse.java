@@ -1,4 +1,4 @@
-package com.example.myhomego_back.chat;
+package com.example.myhomego_back.chat.dto;
 
 import java.time.LocalDateTime;
 
