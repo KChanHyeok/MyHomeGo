@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RegisterPage.css";
 import axios from "axios";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -55,23 +57,25 @@ export default function RegisterPage() {
 
 
   return (
-    <div className="register-container">
-      <h2>회원가입</h2>
-      <input name="id" placeholder="아이디" onChange={handleChange} className="register-input" />
-      <input name="email" placeholder="이메일" onChange={handleChange} className="register-input" />
-      <input type="password" name="password" placeholder="비밀번호" onChange={handleChange} className="register-input" />
-      <input type="password" name="confirmPassword" placeholder="비밀번호 확인" onChange={handleChange} className="register-input" />
-      <input name="name" placeholder="이름" onChange={handleChange} className="register-input" />
-      <input name="phone" placeholder="전화번호" onChange={handleChange} className="register-input" />
+    <div className="flex flex-col items-center justify-center h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url("/images/backgroundImg3.png")` }}>
+      <h2 className="text-2xl mb-6">회원가입</h2>
+      <div className="flex flex-col gap-3 w-72">
+        <Input name="id" placeholder="아이디" onChange={handleChange} />
+        <Input name="email" placeholder="이메일" onChange={handleChange} />
+        <Input type="password" name="password" placeholder="비밀번호" onChange={handleChange} />
+        <Input type="password" name="confirmPassword" placeholder="비밀번호 확인" onChange={handleChange} />
+        <Input name="name" placeholder="이름" onChange={handleChange} />
+        <Input name="phone" placeholder="전화번호" onChange={handleChange} />
+        <Button
+          disabled
+          className="bg-[#FAE100] text-black font-bold hover:bg-[#f5d700] w-72"
+        >
+          카카오톡으로 가입
+        </Button>
 
-      {/* 소셜 로그인 버튼 (디자인만) */}
-      <button className="social-button">카카오톡으로 가입</button>
-
-      {error && <div className="error-message">{error}</div>}
-
-      <button className="register-button" onClick={handleRegister}>
-        회원가입
-      </button>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <Button onClick={handleRegister}>회원가입</Button>
+      </div>
     </div>
   );
 }
