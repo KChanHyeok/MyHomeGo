@@ -151,7 +151,6 @@ const AnnouncementList = () => {
           CCR_CNNT_SYS_DS_CD: item.CCR_CNNT_SYS_DS_CD,
           UPP_AIS_TP_CD: item.UPP_AIS_TP_CD,
           AIS_TP_CD: item.AIS_TP_CD,
-          SS_CODE: item.SS_CODE,
         }))
       );
     } catch (err) {

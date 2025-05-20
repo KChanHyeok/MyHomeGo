@@ -1,0 +1,52 @@
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import styles from './sidebar.module.css';
+
+const menuItems = [
+  {
+    label: '청약 모음',
+    path: '/announcementList',
+  },
+  {
+    label: '챗봇',
+    path: '/chatGpt',
+  },
+];
+
+const Sidebar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  const handleMenuClick = (path) => {
+    window.location.href = path;
+  };
+
+  return (
+    <div className={styles.sidebar}>
+      <div className={styles.contentContainer}>
+        <nav className={styles.navMenu}>
+          {menuItems.map((item) => (
+            <button
+              key={item.path}
+              onClick={() => handleMenuClick(item.path)}
+              className={`${styles.navItem} ${currentPath === item.path ? styles.navItemActive : ''}`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+      </div>
+      <button
+        className={styles.logoutButton}
+        onClick={() => {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }}
+      >
+        로그아웃
+      </button>
+    </div>
+  );
+};
+
+export default Sidebar;
