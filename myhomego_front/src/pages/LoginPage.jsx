@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import axios from "axios";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 
 export default function LoginPage() {
@@ -37,26 +39,12 @@ export default function LoginPage() {
 
 
   return (
-    <div className="login-container">
-      <h2>로그인</h2>
-      <input
-        type="text"
-        placeholder="아이디"
-        value={loginId}
-        onChange={(e) => setLoginId(e.target.value)}
-        className="login-input"
-      />
-      <input
-        type="password"
-        placeholder="비밀번호"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="login-input"
-      />
-      {error && <div className="error-message">{error}</div>}
-      <button className="login-button" onClick={handleLogin}>
-        로그인
-      </button>
+    <div className="flex flex-col items-center justify-center h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url("/images/backgroundImg3.png")` }}>
+      <h2 className="text-2xl mb-6">로그인</h2>
+      <Input placeholder="아이디" value={loginId} onChange={(e) => setLoginId(e.target.value)} className="w-64 mb-4" />
+      <Input type="password" placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} className="w-64 mb-4" />
+      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+      <Button className="w-64" onClick={handleLogin}>로그인</Button>
     </div>
   );
 }
