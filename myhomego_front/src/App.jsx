@@ -5,7 +5,7 @@ import ChatGpt from "./pages/ChatGpt";
 import MainPage from "./pages/MainPage";
 import AnnouncementList from "./pages/AnnouncementList";
 import Layout from "./components/announcementlist/Layout";
-import AnnouncementDetailData from "./components/announcementdetailpage/AnnoucementDetailData";
+import AnnouncementDetailData from "./pages/AnnoucementDetailData";
 
 
 export default function App() {

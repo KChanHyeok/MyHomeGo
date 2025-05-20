@@ -4,10 +4,9 @@ import './AnnoucementDetail.css';
 function AnnouncementDetailTable({ detail, spl }) {
   // detail이 없으면 spl을 detail처럼 활용
   const main = detail || spl;
-
   // spl의 특별공급 목록 예시 출력
+  console.log(spl)
   const splList = spl?.dsList02 || [];
-  console.log(detail)
   console.log(spl)
   return (
     <div className="detail-table-wrap">
