@@ -30,20 +30,25 @@ const FilterValues = {
 };
 
 const AnnouncementList = () => {
+  // URL 파라미터에서 검색어 가져오기
+  const searchParams = new URLSearchParams(window.location.search);
+  const searchKeyword = searchParams.get('search') || '';
+  const isDefaultSearch = searchKeyword === '';
+
   // 상태 관리
   const [announcements, setAnnouncements] = useState([]); // 공고 데이터
-  const [loading, setLoading] = useState(true);                           // 로딩 상태
-  const [error, setError] = useState('');                                // 에러 메시지
-  const [filters, setFilters] = useState({                  // 필터 상태
+  const [loading, setLoading] = useState(true);           // 로딩 상태
+  const [error, setError] = useState('');                // 에러 메시지
+  const [filters, setFilters] = useState({               // 필터 상태
     region: '',
     status: '',
     dateType: '',
     startDate: '',
     endDate: '',
-    title: ''
+    title: searchKeyword || '청년,신혼'
   });
-  const [currentPage, setCurrentPage] = useState(1);                      // 현재 페이지
-  const itemsPerPage = 10;                                               // 페이지당 아이템 수
+  const [currentPage, setCurrentPage] = useState(1);      // 현재 페이지
+  const itemsPerPage = 10;                               // 페이지당 아이템 수
 
   // 페이지네이션 계산
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -147,21 +152,22 @@ const AnnouncementList = () => {
           ...(responses[0].data[1].dsList || []),
           ...(responses[1].data[1].dsList || [])
         ];
-      } else if (title.includes('청년')) {
+      } else if (searchTitle.includes('청년')) {
         filteredData = responses[0].data[1].dsList || [];
-      } else if (title.includes('신혼')) {
+      } else if (searchTitle.includes('신혼')) {
         filteredData = responses[1].data[1].dsList || [];
       }
 
       // 클라이언트 측 필터링
-      const filteredData = allData.filter((item) => {
+      filteredData = filteredData.filter((item) => {
         // 각 필터 조건 체크
+        const matchesType = !filters?.type || item.AIS_TP_CD_NM.includes(filters.type);
         const matchesRegion = !filters || !filters.region || item.CNP_CD_NM.includes(filters.region);
         const matchesStatus = !filters || !filters.status || item.PAN_SS.includes(filters.status);
         const matchesTitle = !filters || !filters.title || item.PAN_NM.toLowerCase().includes(filters.title.toLowerCase());
 
         // 기본 상태에서는 모든 데이터 표시
-        if (!filters || !filters.dateType && !filters.region && !filters.status && !filters.title) {
+        if (!filters || !filters.dateType && !filters.region && !filters.status && !filters.title && !filters.type) {
           return true;
         }
 
@@ -206,7 +212,7 @@ const AnnouncementList = () => {
             target >= startDate && target <= endDate;
         }
 
-        return matchesRegion && matchesStatus && matchesTitle;
+        return matchesType && matchesRegion && matchesStatus && matchesTitle;
       });
 
       // 필터링된 데이터 변환하여 저장
@@ -220,7 +226,8 @@ const AnnouncementList = () => {
       const startIndex = (currentPage - 1) * itemsPerPage;
 
       setAnnouncements(
-        filteredData.map((item) => ({
+        filteredData.map((item, index) => ({
+          ANNOUNCEMENT_NO: startIndex + index + 1, // 공고 번호 (전체 번호 계산)
           PAN_NM: item.PAN_NM,          // 공고명
           PAN_NT_ST_DT: item.PAN_NT_ST_DT, // 공고일
           CLSG_DT: item.CLSG_DT,        // 마감일
