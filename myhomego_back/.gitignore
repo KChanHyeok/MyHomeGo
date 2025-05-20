@@ -151,3 +151,5 @@ $RECYCLE.BIN/
 *.properties
 
 # End of https://www.gitignore.io/api/git,java,maven,windows,eclipse
+
+src/main/resources/application-secret.yml

@@ -1,41 +1,56 @@
 package com.example.myhomego_back.chat;
 
+import com.example.myhomego_back.chat.ChatMessage;
+import com.example.myhomego_back.chat.ChatMessageRepository;
+import com.example.myhomego_back.chat.ChatSession;
+import com.example.myhomego_back.chat.ChatSessionRepository;
+import com.example.myhomego_back.chat.GptResponse;
+import com.example.myhomego_back.chat.GptService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-/*─ 임시 스텁 모델 ─*/
-record ChatSession(String id, LocalDateTime startedAt) {}
-record ChatMessage(String role, String content) {}
-
 @RestController
-@RequestMapping("/api/chat")
+@RequestMapping("/api/chat")  
 @RequiredArgsConstructor
 public class ChatController {
 
-    /*=== 임시 메모리 저장 (Mongo repo 만들기 전까지) ===*/
-    private static ChatSession SESSION
-            = new ChatSession("demo", LocalDateTime.now());
+    private final ChatSessionRepository sessionRepo;
+    private final ChatMessageRepository messageRepo;
+    private final GptService gptService;
 
     @PostMapping("/session")
-    public ChatSession newSession() {
-        // 실제로는 MongoRepo.save(...)
-        SESSION = new ChatSession(
-                java.util.UUID.randomUUID().toString(),
-                LocalDateTime.now());
-        return SESSION;
-    }
+    public ResponseEntity<ChatSession> createSession() {
+        ChatSession session = sessionRepo.save(ChatSession.createNow());
+        return ResponseEntity.ok(session);
+}
 
-    @PostMapping("/{id}/message")
-    public String send(@PathVariable String id,
-                       @RequestBody Map<String,String> body) {
+    @PostMapping("/{sessionId}/message")
+    public GptResponse send(
+            @PathVariable Long sessionId,
+            @RequestBody Map<String, String> body) {
 
         String prompt = body.get("prompt");
-        // TODO: gptService.chat(...) 호출 후 DB 저장
-        return "GPT 답변 (echo): " + prompt;
+        ChatSession session = sessionRepo.findById(sessionId).orElseThrow();
+
+        messageRepo.save(new ChatMessage(session, "user", prompt, LocalDateTime.now()));
+
+        String gptReply = gptService.getResponse(prompt);
+        LocalDateTime now = LocalDateTime.now();
+        messageRepo.save(new ChatMessage(session, "gpt", gptReply, now));
+
+        return new GptResponse("gpt", gptReply, now);
+    }
+
+    @GetMapping("/{sessionId}/history")
+    public List<ChatMessage> getHistory(@PathVariable Long sessionId) {
+        return messageRepo.findBySessionIdOrderByTimestamp(sessionId);
     }
 }
+
+
 
