@@ -1,5 +1,6 @@
 import React from 'react';
-import './AnnoucementDetail.css';
+import styles from './AnnouncementDetailTable.module.css';
+import { Button } from "@/components/ui/button"
 
 function AnnouncementDetailTable({ detail, spl }) {
   // detail이 없으면 spl을 detail처럼 활용
@@ -18,9 +19,24 @@ function AnnouncementDetailTable({ detail, spl }) {
           <div className="detail-label">공고명</div>
           <div className="detail-content">{main?.PAN_NM || '-'}</div>
         </div>
-        <div className="detail-row">
+        <div className="detail-row mt-2">
           <div className="detail-label">공고번호</div>
           <div className="detail-content">{main?.PAN_ID || '-'}</div>
+        </div>
+        <div className="detail-row mt-2">
+          <div className="detail-label">공고페이지</div>
+          <div className="detail-content">
+            {main?.DTL_URL ? (
+              <Button
+                onClick={() => window.open(main.DTL_URL, '_blank')}
+                className="bg-[#5DC1B7] text-black cursor-pointer"
+              >
+                공고페이지로 이동
+              </Button>
+            ) : (
+              <span className="no-url">URL 없음</span>
+            )}
+          </div>
         </div>
       </div>
 
