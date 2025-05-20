@@ -34,9 +34,17 @@ function AnnouncementTable(props) {
               <Link
                 to={`/announcement/${item.PAN_ID}`}
                 state={{
+                  PAN_ID: item.PAN_ID,
+                  PAN_NM: item.PAN_NM,
+                  AIS_TP_CD_NM: item.AIS_TP_CD_NM,
+                  CNP_CD_NM: item.CNP_CD_NM,
+                  PAN_NT_ST_DT: item.PAN_NT_ST_DT,
+                  CLSG_DT: item.CLSG_DT,
+                  PAN_SS: item.PAN_SS,
                   SPL_INF_TP_CD: item.SPL_INF_TP_CD,
                   CCR_CNNT_SYS_DS_CD: item.CCR_CNNT_SYS_DS_CD,
-                  UPP_AIS_TP_CD: item.UPP_AIS_TP_CD
+                  UPP_AIS_TP_CD: item.UPP_AIS_TP_CD,
+                  DTL_URL: item.DTL_URL
                 }}
               >
                 {item.PAN_NM}

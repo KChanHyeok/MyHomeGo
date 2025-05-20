@@ -29,7 +29,13 @@ const Sidebar = () => {
             <button
               key={item.path}
               onClick={() => handleMenuClick(item.path)}
-              className={`${styles.navItem} ${currentPath === item.path ? styles.navItemActive : ''}`}
+              className={`${styles.navItem} ${
+                item.path === '/announcementList' && currentPath.startsWith('/announcement') ? 
+                  styles.navItemActive : 
+                item.path === '/chatGpt' && currentPath === '/chatGpt' ? 
+                  styles.navItemActive : 
+                ''
+              }`}
             >
               {item.label}
             </button>
