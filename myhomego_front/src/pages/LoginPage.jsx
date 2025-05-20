@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
+import axios from "axios";
+
 
 export default function LoginPage() {
   const [loginId, setLoginId] = useState("");
@@ -9,19 +11,30 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!loginId || !password) {
-      setError("아이디와 비밀번호를 모두 입력하세요.");
+      setError("아이디와 비밀번호를 입력하세요.");
       return;
     }
 
-    // Spring Boot 백엔드와 연동할 경우 여기에 fetch 또는 axios 작성 예정
-    console.log("로그인 시도:", loginId, password);
+    try {
+      const response = await axios.post("http://localhost:8080/api/user/login", {
+        userId: loginId,
+        userPwd: password,
+      });
 
-    // 일단 성공했다고 가정하고 홈(/)으로 이동
-    setError("");
-    navigate("/");
+      const token = response.data;
+      localStorage.setItem("accessToken", token); // 토큰 저장
+
+      setError("");
+      alert("로그인 성공");
+      navigate("/main"); // UserMainPage.jsx로 연결된 페이지
+    } catch (err) {
+      console.error("로그인 실패:", err);
+      setError("로그인에 실패했습니다. 아이디 또는 비밀번호를 확인하세요.");
+    }
   };
+
 
   return (
     <div className="login-container">

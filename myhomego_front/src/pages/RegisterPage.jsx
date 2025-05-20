@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RegisterPage.css";
+import axios from "axios";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function RegisterPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const { id, email, password, confirmPassword, name, phone } = form;
 
     if (!id || !email || !password || !confirmPassword || !name || !phone) {
@@ -34,12 +35,24 @@ export default function RegisterPage() {
       return;
     }
 
-    // 여기에 실제 회원가입 API 요청 추가 예정
-    console.log("회원가입 데이터:", form);
+    try {
+      await axios.post("http://localhost:8080/api/user/register", {
+        userId: id,
+        userEmail: email,
+        userPwd: password,
+        userName: name,
+        phone: phone,
+      });
 
-    setError("");
-    navigate("/login");
+      setError("");
+      alert("회원가입 성공! 로그인 페이지로 이동합니다.");
+      navigate("/login");
+    } catch (err) {
+      console.error("회원가입 실패:", err);
+      setError("회원가입 실패: 이미 존재하는 아이디 또는 이메일일 수 있습니다.");
+    }
   };
+
 
   return (
     <div className="register-container">
@@ -50,7 +63,7 @@ export default function RegisterPage() {
       <input type="password" name="confirmPassword" placeholder="비밀번호 확인" onChange={handleChange} className="register-input" />
       <input name="name" placeholder="이름" onChange={handleChange} className="register-input" />
       <input name="phone" placeholder="전화번호" onChange={handleChange} className="register-input" />
-      
+
       {/* 소셜 로그인 버튼 (디자인만) */}
       <button className="social-button">카카오톡으로 가입</button>
 
