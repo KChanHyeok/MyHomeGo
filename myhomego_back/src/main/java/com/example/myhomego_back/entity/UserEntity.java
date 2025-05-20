@@ -1,37 +1,39 @@
 package com.example.myhomego_back.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 
-
 @Entity
-@Data
 @Table(name = "user")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long userId;
 
-	@Column(nullable =  false, unique = true)
-	private String userEmail;
+    @Id
+    @Column(nullable = false, length = 20)
+    private String userId;
 
-	@Column(nullable =  false)
-	private String userPwd;
+    @Column(nullable = false, unique = true, length = 225)
+    private String userEmail;
 
-	@Column(nullable =  false)
-	private String userName;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String userPwd;
 
-	@Column(nullable =  false)
-	private String phone;
+    @Column(nullable = false, length = 5)
+    private String userName;
 
-	@Column
-	@CreatedDate
-	private LocalDateTime regDate;
+    @Column(nullable = false, length = 13)
+    private String phone;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime regDate;
 }
