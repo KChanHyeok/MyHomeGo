@@ -1,0 +1,61 @@
+/* src/pages/RegisterPage.css */
+
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background-image: url("/images/backgroundImg3.png"); /* public 기준 경로 */
+  background-size: cover;        /* 꽉 차게 */
+  background-position: center;   /* 가운데 정렬 */
+  background-repeat: no-repeat;  /* 반복 없음 */
+  justify-content: center;
+}
+
+h2 {
+  margin-bottom: 24px;
+}
+
+.register-input {
+  width: 280px;
+  padding: 10px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.register-button {
+  width: 280px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.register-button:hover {
+  background-color: #555;
+}
+
+.social-button {
+  width: 280px;
+  padding: 10px;
+  margin-bottom: 12px;
+  background-color: #fae100;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: not-allowed; /* 아직 비활성 */
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
