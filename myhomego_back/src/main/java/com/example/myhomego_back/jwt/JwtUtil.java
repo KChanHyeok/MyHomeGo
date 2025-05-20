@@ -2,6 +2,8 @@ package com.example.myhomego_back.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -13,8 +15,7 @@ public class JwtUtil {
     private final Key key;
     private final long expireTime = 1000 * 60 * 60; // 1시간
 
-    public JwtUtil() {
-        String secret = "myhomego-jwt-secret-key-2024-very-secure!"; // 최소 32바이트
+    public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
