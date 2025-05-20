@@ -159,21 +159,34 @@ function AnnouncementDetailTable({ detail, spl }) {
         <TableCaption>공급 세부내역</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[200px]">주소(DNG_HS_ADR)</TableHead>
+            <TableHead className="w-[150px]">시군구명(CNP_NM)</TableHead>
             <TableHead>공급호수(LTR_SPL_RMNO)</TableHead>
-            <TableHead>시군구명(CNP_NM)</TableHead>
+            <TableHead>주소(DNG_HS_ADR)</TableHead>
             <TableHead className="text-right">공급세대수(QUP_CNT)</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {splList.map((item, idx) => (
-            <TableRow key={idx}>
-              <TableCell>{item.DNG_HS_ADR}</TableCell>
-              <TableCell>{item.LTR_SPL_RMNO}</TableCell>
-              <TableCell>{item.CNP_NM}</TableCell>
-              <TableCell className="text-right">{item.QUP_CNT}</TableCell>
-            </TableRow>
-          ))}
+          {(() => {
+            const grouped = splList.reduce((acc, item) => {
+              if (!acc[item.CNP_NM]) acc[item.CNP_NM] = [];
+              acc[item.CNP_NM].push(item);
+              return acc;
+            }, {});
+            return Object.entries(grouped).map(([region, items]) =>
+              items.map((item, idx) => (
+                <TableRow key={region + idx}>
+                  {idx === 0 && (
+                    <TableCell rowSpan={items.length} className="thSt">
+                      {region}
+                    </TableCell>
+                  )}
+                  <TableCell>{item.LTR_SPL_RMNO}</TableCell>
+                  <TableCell>{item.DNG_HS_ADR}</TableCell>
+                  <TableCell className="text-right">{item.QUP_CNT}</TableCell>
+                </TableRow>
+              ))
+            );
+          })()}
         </TableBody>
       </Table>
 
