@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -30,9 +31,16 @@ function AnnouncementTable(props) {
               <TableCell>{item.ANNOUNCEMENT_NO}</TableCell>
               <TableCell>{item.CNP_CD_NM}</TableCell>
               <TableCell>
-                <a href={item.DTL_URL} target="_blank" rel="noopener noreferrer">
-                  {item.PAN_NM}
-                </a>
+              <Link
+                to={`/announcement/${item.PAN_ID}`}
+                state={{
+                  SPL_INF_TP_CD: item.SPL_INF_TP_CD,
+                  CCR_CNNT_SYS_DS_CD: item.CCR_CNNT_SYS_DS_CD,
+                  UPP_AIS_TP_CD: item.UPP_AIS_TP_CD
+                }}
+              >
+                {item.PAN_NM}
+              </Link>
               </TableCell>
               <TableCell>{item.AIS_TP_CD_NM}</TableCell>
               <TableCell>{item.PAN_NT_ST_DT}</TableCell>
