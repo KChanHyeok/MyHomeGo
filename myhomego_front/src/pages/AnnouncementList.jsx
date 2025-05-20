@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/announcementlist/Sidebar';
+import AnnouncementSidebar from '../components/announcementlist/Sidebar';
 import AnnouncementFilterBar from '../components/announcementlist/AnnouncementFilterBar';
 import AnnouncementTable from '../components/announcementlist/AnnouncementTable';
 import axios from 'axios';
 import { getLhAnnouncements } from '../components/announcementlist/api';
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 // LH API 키 (실제 사용 시 환경 변수로 관리하는 것을 추천)
 const API_KEY = '6NyqkFLFWxC9mkkEU6ntshrtBhh+77ivcPNYzUql7auzUuyQJAX1p8a8avnSHv4ElqjrpsqQkQOuFfmInwyF5A==';
@@ -83,7 +93,7 @@ const AnnouncementList = () => {
             params: response.config.params,
             status: response.status
           });
-          
+
           // API 응답 데이터 로그
           console.log('청년 공고 API 응답 데이터:', {
             totalCount: response.data[0]?.total_count || 0,
@@ -95,7 +105,7 @@ const AnnouncementList = () => {
               PAN_SS: item.PAN_SS
             })) || []
           });
-          
+
           return response;
         }),
         axios.get(
@@ -115,7 +125,7 @@ const AnnouncementList = () => {
             params: response.config.params,
             status: response.status
           });
-          
+
           // API 응답 데이터 로그
           console.log('신혼 공고 API 응답 데이터:', {
             totalCount: response.data[0]?.total_count || 0,
@@ -127,14 +137,14 @@ const AnnouncementList = () => {
               PAN_SS: item.PAN_SS
             })) || []
           });
-          
+
           return response;
         })
       ]);
 
       // 검색어에 따른 데이터 처리
       let filteredData = [];
-      
+
       // 기본 검색일 때는 모든 데이터 합치기
       if (isDefaultSearch) {
         filteredData = [
@@ -163,27 +173,27 @@ const AnnouncementList = () => {
         // 날짜 필터링
         if (filters && filters.dateType) {
           const targetDate = filters.dateType === '게시일' ? item.PAN_NT_ST_DT : item.CLSG_DT;
-          
+
           // 날짜가 없을 경우 필터링 통과
           if (!targetDate) {
             console.log('날짜 필터링 - 날짜 없음:', item.PAN_NM);
             return true;
           }
-          
+
           // 날짜 형식 변환 함수
           const formatDate = (date) => {
             if (!date) return new Date('1970-01-01');
-            
+
             // YYYY-MM-DD 형식을 그대로 사용
             if (date.includes('-')) return new Date(date);
-            
+
             // YYYY.MM.DD 형식을 YYYY-MM-DD로 변환
             const parts = date.split('.');
             if (parts.length === 3) {
               const [year, month, day] = parts;
               return new Date(`${year}-${month}-${day}`);
             }
-            
+
             // YYYYMMDD 형식을 YYYY-MM-DD로 변환
             const year = date.slice(0, 4);
             const month = date.slice(4, 6);
@@ -194,8 +204,8 @@ const AnnouncementList = () => {
           const target = formatDate(targetDate);
           const startDate = formatDate(filters.startDate || '');
           const endDate = formatDate(filters.endDate || '');
-          
-          return matchesType && matchesRegion && matchesStatus && matchesTitle && 
+
+          return matchesType && matchesRegion && matchesStatus && matchesTitle &&
             target >= startDate && target <= endDate;
         }
 
@@ -205,13 +215,13 @@ const AnnouncementList = () => {
       // 필터링된 데이터 변환하여 저장
       // 전체 공고 수 계산
       const totalAnnouncements = filteredData.length;
-      
+
       // 페이지당 아이템 수 계산
       const itemsPerPage = 10;
-      
+
       // 현재 페이지의 시작 인덱스 계산
       const startIndex = (currentPage - 1) * itemsPerPage;
-      
+
       setAnnouncements(
         filteredData.map((item, index) => ({
           ANNOUNCEMENT_NO: startIndex + index + 1, // 공고 번호 (전체 번호 계산)
@@ -239,7 +249,9 @@ const AnnouncementList = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">청약 공고 모음</h1>
-      <AnnouncementFilterBar onFilter={fetchAnnouncements} />
+      <div className="mb-6">
+        <AnnouncementFilterBar onFilter={fetchAnnouncements} />
+      </div>
       {loading ? (
         <p>로딩 중...</p>
       ) : error ? (
@@ -247,45 +259,40 @@ const AnnouncementList = () => {
       ) : (
         <>
           {/* 현재 페이지의 공고 데이터 표시 */}
-          <AnnouncementTable announcements={currentItems} />
-          
+          <AnnouncementTable announcements={currentItems} className="mt-6" />
+
           {/* 페이지네이션 */}
-          <div className="mt-4 flex justify-center">
-            <nav className="flex items-center justify-center">
+          <Pagination className="mt-8">
+            <PaginationContent>
               {/* 이전 페이지 버튼 */}
-              <button
+              <PaginationItem
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1 mx-1 rounded bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50"
               >
-                이전
-              </button>
-              
+                <PaginationPrevious href="#" />
+              </PaginationItem>
               {/* 페이지 번호 버튼 */}
               {pageNumbers.map((number) => (
                 <button
                   key={number}
                   onClick={() => setCurrentPage(number)}
-                  className={`px-3 py-1 mx-1 rounded ${
-                    currentPage === number
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 hover:bg-gray-300'
-                  }`}
+                  className={`px-3 py-1 mx-1 rounded ${currentPage === number
+                      ? 'bg-[#5DC1B7] text-black'
+                      : 'bg-[#ECFFF7] hover:bg-[#5DC1B7] cursor-pointer'
+                    }`}
                 >
                   {number}
                 </button>
               ))}
-              
               {/* 다음 페이지 버튼 */}
-              <button
+              <PaginationItem
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 mx-1 rounded bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50"
               >
-                다음
-              </button>
-            </nav>
-          </div>
+                <PaginationNext href="#" />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </>
       )}
     </div>
