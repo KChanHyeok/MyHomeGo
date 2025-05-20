@@ -45,6 +45,7 @@ const AnnouncementList = () => {
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   // 공고 데이터 가져오기
+
   const fetchAnnouncements = async (filters) => {
     try {
       // 기본 검색어 설정 (청년/신혼 공고)
@@ -97,7 +98,7 @@ const AnnouncementList = () => {
         const matchesRegion = !filters || !filters.region || item.CNP_CD_NM.includes(filters.region);
         const matchesStatus = !filters || !filters.status || item.PAN_SS.includes(filters.status);
         const matchesTitle = !filters || !filters.title || item.PAN_NM.toLowerCase().includes(filters.title.toLowerCase());
-        
+
         // 기본 상태에서는 모든 데이터 표시
         if (!filters || !filters.dateType && !filters.region && !filters.status && !filters.title) {
           return true;
@@ -106,17 +107,17 @@ const AnnouncementList = () => {
         // 날짜 필터링
         if (filters && filters.dateType) {
           const targetDate = filters.dateType === '게시일' ? item.PAN_NT_ST_DT : item.CLSG_DT;
-          
+
           // 날짜가 없을 경우 필터링 통과
           if (!targetDate) return true;
-          
+
           // 날짜 형식 변환 함수
           const formatDate = (date) => {
             if (!date) return new Date('1970-01-01');
-            
+
             // YYYY-MM-DD 형식을 그대로 사용
             if (date.includes('-')) return new Date(date);
-            
+
             // YYYYMMDD 형식을 YYYY-MM-DD로 변환
             const year = date.slice(0, 4);
             const month = date.slice(4, 6);
@@ -127,8 +128,8 @@ const AnnouncementList = () => {
           const target = formatDate(targetDate);
           const startDate = formatDate(filters.startDate || '');
           const endDate = formatDate(filters.endDate || '');
-          
-          return matchesRegion && matchesStatus && matchesTitle && 
+
+          return matchesRegion && matchesStatus && matchesTitle &&
             target >= startDate && target <= endDate;
         }
 
@@ -144,7 +145,13 @@ const AnnouncementList = () => {
           CNP_CD_NM: item.CNP_CD_NM,    // 지역명
           AIS_TP_CD_NM: item.AIS_TP_CD_NM, // 유형명
           DTL_URL: item.DTL_URL,        // 상세링크
-          PAN_SS: item.PAN_SS           // 상태
+          PAN_SS: item.PAN_SS,
+          PAN_ID: item.PAN_ID,     // 상태
+          SPL_INF_TP_CD: item.SPL_INF_TP_CD,
+          CCR_CNNT_SYS_DS_CD: item.CCR_CNNT_SYS_DS_CD,
+          UPP_AIS_TP_CD: item.UPP_AIS_TP_CD,
+          AIS_TP_CD: item.AIS_TP_CD,
+          SS_CODE: item.SS_CODE,
         }))
       );
     } catch (err) {
@@ -171,7 +178,7 @@ const AnnouncementList = () => {
         <>
           {/* 현재 페이지의 공고 데이터 표시 */}
           <AnnouncementTable announcements={currentItems} />
-          
+
           {/* 페이지네이션 */}
           <div className="mt-4 flex justify-center">
             <nav className="flex items-center justify-center">
@@ -183,22 +190,21 @@ const AnnouncementList = () => {
               >
                 이전
               </button>
-              
+
               {/* 페이지 번호 버튼 */}
               {pageNumbers.map((number) => (
                 <button
                   key={number}
                   onClick={() => setCurrentPage(number)}
-                  className={`px-3 py-1 mx-1 rounded ${
-                    currentPage === number
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 hover:bg-gray-300'
-                  }`}
+                  className={`px-3 py-1 mx-1 rounded ${currentPage === number
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-200 hover:bg-gray-300'
+                    }`}
                 >
                   {number}
                 </button>
               ))}
-              
+
               {/* 다음 페이지 버튼 */}
               <button
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
