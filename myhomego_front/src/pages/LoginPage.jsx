@@ -28,7 +28,7 @@ export default function LoginPage() {
 
       setError("");
       alert("로그인 성공");
-      navigate("/main");
+      navigate("/");
     } catch (err) {
       console.error("로그인 실패:", err);
       setError("로그인에 실패했습니다. 아이디 또는 비밀번호를 확인하세요.");
