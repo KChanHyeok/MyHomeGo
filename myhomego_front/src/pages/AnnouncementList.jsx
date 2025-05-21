@@ -47,6 +47,14 @@ const AnnouncementList = () => {
     endDate: '',
     title: searchKeyword || '청년,신혼'
   });
+
+  // Update the title filter when search parameter changes
+  useEffect(() => {
+    setFilters(prev => ({
+      ...prev,
+      title: searchKeyword || '청년,신혼'
+    }));
+  }, [searchKeyword]);
   const [currentPage, setCurrentPage] = useState(1);      // 현재 페이지
   const itemsPerPage = 10;                               // 페이지당 아이템 수
 
@@ -63,9 +71,8 @@ const AnnouncementList = () => {
 
   const fetchAnnouncements = async (filters) => {
     try {
-      // 기본 검색어 설정 (청년/신혼 공고)
-      const baseTitle = '청년,신혼';
-      const searchTitle = filters && filters.title ? filters.title : baseTitle;
+      // Use the search parameter directly if provided
+      const searchTitle = searchKeyword ? searchKeyword : '청년,신혼';
 
       // 날짜 필터링 파라미터 설정
       const dateParams = filters && filters.dateType ? {
