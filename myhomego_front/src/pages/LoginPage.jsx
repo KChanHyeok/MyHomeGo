@@ -27,7 +27,7 @@ export default function LoginPage() {
       localStorage.setItem("accessToken", token);
 
       setError("");
-      alert("로그인 성공");
+      // alert("로그인 성공");
       navigate("/");
     } catch (err) {
       console.error("로그인 실패:", err);
