@@ -197,11 +197,8 @@ export default function RegisterPage() {
             </Button>
 
             <Button
-              onClick={() =>
-                window.location.href =
-                "http://localhost:8080/auth/kakao"
-              }
-              className="bg-[#FAE100] text-black font-bold hover:bg-[#f5d700] w-full"
+              disabled
+              className="bg-[#FAE100] text-black font-bold hover:bg-[#f5d700] w-full cursor-not-allowed"
             >
               카카오톡으로 가입
             </Button>
