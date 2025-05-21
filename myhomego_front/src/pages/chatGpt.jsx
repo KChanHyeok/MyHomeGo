@@ -3,58 +3,95 @@ import { ChatInput } from "@/components/chat/chat-input";
 import ChatMessageList from "@/components/chat/chat-message-list";
 import { Button } from "@/components/ui/button";
 import { Paperclip, Mic, CornerDownLeft } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function ChatGpt() {
-  const [messages] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
   // const [inputMessage, setInputMessage] = useState("");
 
   // const messagesRef = useRef(null);
   const formRef = useRef(null);
 
+  const messagesContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   const handleInputChange = (e) => {
-    setInputMessage(e.target.value);
+    if (e.code !== "Enter" && !isGenerating) {
+      const input = e.target.value;
+      setInputMessage(input);
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (inputMessage.trim()) {
+      setMessages([...messages, { role: "user", content: inputMessage }]);
+      setIsGenerating(true);
+      setInputMessage("");
+
+      const url = `http://localhost:8080/api/chat/1/message`;
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: inputMessage }),
+      });
+      const data = await response.json();
+      setIsGenerating(false);
+      setMessages((prev) => [...prev, { role: "ai", content: data.content }]);
+    }
+  };
+
+  const onKeyDown = (e) => {
+    if (e.code === "Enter" && !isGenerating) {
+      // 메시지 전송 로직
+      onSubmit(e);
+    }
   };
 
   return (
-    <main className="flex h-screen w-full max-w-3xl flex-col items-center mx-auto">
+    <main className="flex h-screen w-full max-w-4xl flex-col items-center mx-auto border rounded-2xl">
       <div className="flex-1 w-full overflow-y-auto py-6">
-        <ChatMessageList>
+        <ChatMessageList scrollRef={messagesContainerRef}>
           {messages &&
             messages.map((message, index) => (
               <ChatBubble key={index} variant={message.role == "user" ? "sent" : "received"}>
                 <ChatBubbleAvatar src="" fallback={message.role == "user" ? "👨🏽" : "🤖"} />
-                <ChatBubbleMessage>
-                  {message.content}
-                  {isGenerating && (
-                    <ChatBubble variant="received">
-                      <ChatBubbleAvatar src="" fallback="🤖" />
-                      <ChatBubbleMessage isLoading />
-                    </ChatBubble>
-                  )}
-                </ChatBubbleMessage>
+                <ChatBubbleMessage>{message.content}</ChatBubbleMessage>
               </ChatBubble>
             ))}
+          {isGenerating && (
+            <ChatBubble variant="received">
+              <ChatBubbleAvatar src="" fallback="🤖" />
+              <ChatBubbleMessage isLoading />
+            </ChatBubble>
+          )}
         </ChatMessageList>
       </div>
       <div className="w-full px-4 pb-4">
         <form
           ref={formRef}
-          // onSubmit={onSubmit}
+          onSubmit={onSubmit}
           className="relative rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
         >
           <ChatInput
             value={inputMessage}
-            // onKeyDown={onKeyDown}
+            onKeyDown={onKeyDown}
             onChange={handleInputChange}
             placeholder="Type your message here..."
             className="rounded-lg bg-background border-0 shadow-none focus-visible:ring-0"
           />
           <div className="flex items-center p-3 pt-0">
-            <Button variant="ghost" size="icon">
+            {/* <Button variant="ghost" size="icon">
               <Paperclip className="size-4" />
               <span className="sr-only">Attach file</span>
             </Button>
@@ -62,9 +99,9 @@ export default function ChatGpt() {
             <Button variant="ghost" size="icon">
               <Mic className="size-4" />
               <span className="sr-only">Use Microphone</span>
-            </Button>
+            </Button> */}
 
-            <Button disabled={!inputMessage || isLoading} type="submit" size="sm" className="ml-auto gap-1.5">
+            <Button disabled={!inputMessage || isGenerating} type="submit" size="sm" className="ml-auto gap-1.5">
               Send Message
               <CornerDownLeft className="size-3.5" />
             </Button>
