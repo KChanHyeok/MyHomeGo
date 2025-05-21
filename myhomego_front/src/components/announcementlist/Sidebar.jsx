@@ -5,8 +5,16 @@ import { Button } from "@/components/ui/button"
 
 const menuItems = [
   {
-    label: '청약 모음',
+    label: '전체 청약 모음',
     path: '/announcementList',
+  },
+  {
+    label: '청년 청약 모음',
+    path: '/announcementList?search=청년',
+  },
+  {
+    label: '신혼 청약 모음',
+    path: '/announcementList?search=신혼',
   },
   {
     label: '챗봇',
@@ -16,10 +24,18 @@ const menuItems = [
 
 const Sidebar = ({ children }) => {
   const location = useLocation();
-  const currentPath = location.pathname;
+  const currentPath = location.pathname + (location.search || '');
 
   const handleMenuClick = (path) => {
-    window.location.href = path;
+    // Remove any existing query parameters from the current path
+    const currentPath = window.location.pathname;
+    // If path contains query parameters, use it as is
+    if (path.includes('?')) {
+      window.location.href = path;
+    } else {
+      // If path doesn't contain query parameters, use it directly
+      window.location.href = path;
+    }
   };
 
   return (
@@ -31,13 +47,16 @@ const Sidebar = ({ children }) => {
             <button
               key={item.path}
               onClick={() => handleMenuClick(item.path)}
-              className={`${styles.navItem} ${
-                item.path === '/announcementList' && currentPath.startsWith('/announcement') ? 
-                  styles.navItemActive : 
-                item.path === '/chatGpt' && currentPath === '/chatGpt' ? 
-                  styles.navItemActive : 
-                ''
-              }`}
+              className={`
+                ${styles.navItem} ${
+                  (item.path === '/announcementList?search=청년' && currentPath === '/announcementList?search=청년') ||
+                  (item.path === '/announcementList?search=신혼' && currentPath === '/announcementList?search=신혼') ||
+                  (item.path === '/announcementList' && currentPath === '/announcementList') ||
+                  (item.path === '/chatGpt' && currentPath === '/chatGpt')
+                    ? styles.navItemActive
+                    : ''
+                }
+              `}
             >
               {item.label}
             </button>

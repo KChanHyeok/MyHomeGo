@@ -134,63 +134,65 @@ function AnnouncementFilterBar(props) {
           </SelectContent>
         </Select>
 
-        <div className="flex gap-2">
-          <Popover>
-            <PopoverTrigger disabled={!filters.dateType}>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-[170px] justify-start text-left font-normal",
-                  !filters.startDate && "text-muted-foreground",
-                  !filters.dateType && "cursor-not-allowed bg-gray-100"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {filters.startDate ? format(new Date(filters.startDate), "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={filters.startDate ? new Date(filters.startDate) : undefined}
-                onSelect={(date) => {
-                  const koreaDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
-                  setFilters(prev => ({ ...prev, startDate: koreaDate.toISOString().split('T')[0] }));
-                }}
-                disabled={!filters.dateType}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-          <span>~</span>
-          <Popover>
-            <PopoverTrigger disabled={!filters.dateType}>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-[170px] justify-start text-left font-normal",
-                  !filters.endDate && "text-muted-foreground",
-                  !filters.dateType && "cursor-not-allowed bg-gray-100"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {filters.endDate ? format(new Date(filters.endDate), "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={filters.endDate ? new Date(filters.endDate) : undefined}
-                onSelect={(date) => {
-                  const koreaDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
-                  setFilters(prev => ({ ...prev, endDate: koreaDate.toISOString().split('T')[0] }));
-                }}
-                disabled={!filters.dateType}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+        {filters.dateType && filters.dateType !== "전체" && (
+          <div className="flex gap-2">
+            <Popover>
+              <PopoverTrigger disabled={!filters.dateType}>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[170px] justify-start text-left font-normal",
+                    !filters.startDate && "text-muted-foreground",
+                    !filters.dateType && "cursor-not-allowed bg-gray-100"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {filters.startDate ? format(new Date(filters.startDate), "yyyy년 MM월 dd일") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={filters.startDate ? new Date(filters.startDate) : undefined}
+                  onSelect={(date) => {
+                    const koreaDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
+                    setFilters(prev => ({ ...prev, startDate: koreaDate.toISOString().split('T')[0] }));
+                  }}
+                  disabled={!filters.dateType}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+            <span>~</span>
+            <Popover>
+              <PopoverTrigger disabled={!filters.dateType}>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[170px] justify-start text-left font-normal",
+                    !filters.endDate && "text-muted-foreground",
+                    !filters.dateType && "cursor-not-allowed bg-gray-100"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {filters.endDate ? format(new Date(filters.endDate), "yyyy년 MM월 dd일") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={filters.endDate ? new Date(filters.endDate) : undefined}
+                  onSelect={(date) => {
+                    const koreaDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
+                    setFilters(prev => ({ ...prev, endDate: koreaDate.toISOString().split('T')[0] }));
+                  }}
+                  disabled={!filters.dateType}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-2">
