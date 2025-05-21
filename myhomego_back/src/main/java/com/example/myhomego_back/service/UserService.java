@@ -40,8 +40,8 @@ public class UserService {
                 .phone(request.getPhone())
                 .regDate(LocalDateTime.now())
                 .build();
-
-        userRepository.save(newUser);
+                
+                userRepository.save(newUser);
     }
 
     // 로그인 처리
