@@ -1,5 +1,6 @@
 import React from 'react';
 import './AnnoucementDetail.css';
+import { Link } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -9,33 +10,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import styles from './AnnouncementDetailTable.module.css';
 import { Button } from "@/components/ui/button"
 
 function AnnouncementDetailTable({ detail, spl }) {
+  console.log(detail);
+  console.log(spl);
   // detail이 없으면 spl을 detail처럼 활용
   const main = detail || spl;
-  // spl의 특별공급 목록 예시 출력
   const splList = spl?.dsList02 || [];
-  console.log(spl)
+  const files = main?.dsAhflInfo || [];
+  const noticeFiles = files.filter(file => file.CMN_AHFL_NM?.includes("공고"));
+  const otherFiles = files.filter(file => !file.CMN_AHFL_NM?.includes("공고"));
+  const TYPE_MAP = {
+    "01": "토지",
+    "05": "분양주택",
+    "06": "임대주택",
+    "13": "주거복지",
+    "22": "상가",
+    "39": "신혼희망타운"
+  };
   return (
     <div className="detail-table-wrap">
-      <h2 className="detail-table-title">공고 상세정보</h2>
+      <Link to="/announcementlist" className="text-blue-500 underline mb-4 inline-block">← 목록으로 돌아가기</Link>
+      <h2 className="text-2xl font-bold mb-4">공고 상세</h2>
 
       {/* 기본 정보 섹션 */}
-      <div className="detail-section">
-        <div className="detail-row">
-          <div className="detail-label">공고명</div>
-          <div className="detail-content">{main?.PAN_NM || '-'}</div>
+      <div className="detail-section detail-section--summary">
+        {/* 상단 요약 정보 */}
+        <div className="detail-row2">
+          <div className="detail-title">{main?.PAN_NM || '-'}</div>
         </div>
-        <div className="detail-row mt-2">
-          <div className="detail-label">공고번호</div>
-          <div className="detail-content">{main?.PAN_ID || '-'}</div>
-        </div>
-        <div className="detail-row mt-2">
-          <div className="detail-label">공고페이지</div>
-          <div className="detail-content">
-            {main?.DTL_URL ? (
+        <ul className="detail-row1">
+          <li className="detail-label">접수상태 : {main?.PAN_SS || '-'}</li>
+          <li className="detail-label">유형 : {TYPE_MAP[main?.UPP_AIS_TP_CD] || main?.UPP_AIS_TP_CD || '-'}</li>
+          <li className="detail-label">공고번호 : {main?.PAN_ID || '-'}</li>
+          <li className="detail-label">
+            공고페이지 : {main?.DTL_URL ? (
               <Button
                 onClick={() => window.open(main.DTL_URL, '_blank')}
                 className="bg-[#5DC1B7] text-black cursor-pointer"
@@ -45,37 +55,122 @@ function AnnouncementDetailTable({ detail, spl }) {
             ) : (
               <span className="no-url">URL 없음</span>
             )}
+          </li>
+        </ul>
+
+        {/* 첨부파일 섹션 */}
+        {files.length > 0 && (
+          <div className="bbsV_atchmnfl">
+            {/* 공고문 섹션 */}
+            {noticeFiles.length > 0 && (
+              <dl className="col_red">
+                <dt className="pc_red">공고문</dt>
+                <dd>
+                  <ul className="bbsV_link file">
+                    {noticeFiles.map((file, idx) => (
+                      <li key={idx} className="file-bullet notice-file">
+                        <span className="file-star">★</span>
+                        <a
+                          href={file.AHFL_URL}
+                          className="file-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {file.CMN_AHFL_NM}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </dl>
+            )}
+            {/* 다운로드(기타) 섹션 */}
+            {otherFiles.length > 0 && (
+              <dl>
+                <dt className="pc_down">다운로드</dt>
+                <dd>
+                  <ul className="bbsV_link file">
+                    {otherFiles.map((file, idx) => (
+                      <li key={idx} className="file-bullet">
+                        <a
+                          href={file.AHFL_URL}
+                          className="file-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {file.CMN_AHFL_NM}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </dl>
+            )}
           </div>
-        </div>
+        )}
       </div>
 
+      <h3 className="detail-subtitle">공급 정보</h3>
+      <Table className="table-bordered">
+        <TableHeader>
+          <TableRow className="table-head">
+            <TableHead className="w-[150px]">시군구명</TableHead>
+            <TableHead>공급호수</TableHead>
+            <TableHead>주소</TableHead>
+            <TableHead className="text-right">공급세대수</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {splList.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4} style={{ textAlign: "center", color: "#888", fontSize: "1.2rem", fontWeight: "bold" }}>
+                이 데이터는 제공되지 않습니다.
+              </TableCell>
+            </TableRow>
+          ) : (
+            (() => {
+              const grouped = splList.reduce((acc, item) => {
+                if (!acc[item.CNP_NM]) acc[item.CNP_NM] = [];
+                acc[item.CNP_NM].push(item);
+                return acc;
+              }, {});
+              return Object.entries(grouped).map(([region, items]) =>
+                items.map((item, idx) => (
+                  <TableRow key={region + idx}>
+                    {idx === 0 && (
+                      <TableCell rowSpan={items.length} className="thSt">
+                        {region}
+                      </TableCell>
+                    )}
+                    <TableCell>{item.LTR_SPL_RMNO}</TableCell>
+                    <TableCell>{item.DNG_HS_ADR}</TableCell>
+                    <TableCell className="text-right">{item.QUP_CNT}</TableCell>
+                  </TableRow>
+                ))
+              );
+            })()
+          )}
+        </TableBody>
+      </Table>
       {/* 서류접수기간 섹션 */}
       <div className="detail-section">
         <h3 className="detail-subtitle">접수 일정</h3>
         <div className="detail-grid-3">
           <div className="detail-row">
-            <div className="detail-label">접수기간 시작일</div>
-            <div className="detail-content">{main?.dsSplScdl?.[0]?.SBSC_ACP_ST_DT || '-'}</div>
+            <div className="detail-label">접수기간</div>
+            <div className="detail-content">{main?.dsSplScdl?.[0]?.SBSC_ACP_ST_DT || '이 데이터는 제공되지 않습니다.'} ~ {main?.dsSplScdl?.[0]?.SBSC_ACP_CLSG_DT || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
           <div className="detail-row">
-            <div className="detail-label">접수기간 종료일</div>
-            <div className="detail-content">{main?.dsSplScdl?.[0]?.SBSC_ACP_CLSG_DT || '-'}</div>
+            <div className="detail-label">서류접수기간</div>
+            <div className="detail-content">{main?.dsSplScdl?.[0]?.PPR_ACP_ST_DT || '이 데이터는 제공되지 않습니다.'} ~ {main?.dsSplScdl?.[0]?.PPR_ACP_CLSG_DT || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
           <div className="detail-row">
             <div className="detail-label">서류대상자 발표일</div>
-            <div className="detail-content">{main?.dsSplScdl?.[0]?.PPR_SBM_OPE_ANC_DT || '-'}</div>
-          </div>
-          <div className="detail-row">
-            <div className="detail-label">서류접수 시작일</div>
-            <div className="detail-content">{main?.dsSplScdl?.[0]?.PPR_ACP_ST_DT || '-'}</div>
-          </div>
-          <div className="detail-row">
-            <div className="detail-label">서류접수 종료일</div>
-            <div className="detail-content">{main?.dsSplScdl?.[0]?.PPR_ACP_CLSG_DT || '-'}</div>
+            <div className="detail-content">{main?.dsSplScdl?.[0]?.PPR_SBM_OPE_ANC_DT || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
           <div className="detail-row">
             <div className="detail-label">당첨자 발표</div>
-            <div className="detail-content">{main?.dsSplScdl?.[0]?.PZWR_ANC_DT || '-'}</div>
+            <div className="detail-content">{main?.dsSplScdl?.[0]?.PZWR_ANC_DT || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
         </div>
       </div>
@@ -86,11 +181,11 @@ function AnnouncementDetailTable({ detail, spl }) {
         <div className="detail-grid">
           <div className="detail-row">
             <div className="detail-label">시작일</div>
-            <div className="detail-content">{main?.dsCtrtPlc?.[0]?.TSK_ST_DTTM || '-'}</div>
+            <div className="detail-content">{main?.dsCtrtPlc?.[0]?.TSK_ST_DTTM || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
           <div className="detail-row">
             <div className="detail-label">종료일</div>
-            <div className="detail-content">{main?.dsCtrtPlc?.[0]?.TSK_ED_DTTM || '-'}</div>
+            <div className="detail-content">{main?.dsCtrtPlc?.[0]?.TSK_ED_DTTM || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
         </div>
       </div>
@@ -101,22 +196,11 @@ function AnnouncementDetailTable({ detail, spl }) {
         <div className="detail-grid">
           <div className="detail-row">
             <div className="detail-label">주소</div>
-            <div className="detail-content">{main?.dsSbdDongAhfl?.[0]?.CTRT_PLC_ADR || '-'}</div>
+            <div className="detail-content">{main?.dsSbdDongAhfl?.[0]?.CTRT_PLC_ADR || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
           <div className="detail-row">
             <div className="detail-label">전화번호</div>
-            <div className="detail-content">{main?.dsCtrtPlc?.[0]?.SIL_OFC_TLNO || '-'}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* 단지 정보 섹션 */}
-      <div className="detail-section">
-        <h3 className="detail-subtitle">단지 정보</h3>
-        <div className="detail-grid">
-          <div className="detail-row">
-            <div className="detail-label">단지</div>
-            <div className="detail-content">{main?.dsSbd?.[0]?.BZDT_NM || '-'}</div>
+            <div className="detail-content">{main?.dsCtrtPlc?.[0]?.SIL_OFC_TLNO || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
         </div>
       </div>
@@ -140,96 +224,8 @@ function AnnouncementDetailTable({ detail, spl }) {
         </div>
       </div>
 
-      {/* 첨부파일 섹션 */}
-      {main?.dsAhflInfo?.length > 0 && (
-        <div className="detail-section">
-          <h3 className="detail-subtitle">첨부파일</h3>
-          <div className="file-list">
-            {main.dsAhflInfo.map((file, idx) => (
-              <a key={idx} href={file.AHFL_URL} className="file-link">
-                📄 {file.CMN_AHFL_NM}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* spl 데이터가 있을 때 특별공급 목록 추가 출력 예시 */}
-      <Table>
-        <TableCaption>공급 세부내역</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[150px]">시군구명(CNP_NM)</TableHead>
-            <TableHead>공급호수(LTR_SPL_RMNO)</TableHead>
-            <TableHead>주소(DNG_HS_ADR)</TableHead>
-            <TableHead className="text-right">공급세대수(QUP_CNT)</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {(() => {
-            const grouped = splList.reduce((acc, item) => {
-              if (!acc[item.CNP_NM]) acc[item.CNP_NM] = [];
-              acc[item.CNP_NM].push(item);
-              return acc;
-            }, {});
-            return Object.entries(grouped).map(([region, items]) =>
-              items.map((item, idx) => (
-                <TableRow key={region + idx}>
-                  {idx === 0 && (
-                    <TableCell rowSpan={items.length} className="thSt">
-                      {region}
-                    </TableCell>
-                  )}
-                  <TableCell>{item.LTR_SPL_RMNO}</TableCell>
-                  <TableCell>{item.DNG_HS_ADR}</TableCell>
-                  <TableCell className="text-right">{item.QUP_CNT}</TableCell>
-                </TableRow>
-              ))
-            );
-          })()}
-        </TableBody>
-      </Table>
-
     </div>
   );
 }
-function GroupedTable({ data }) {
-  // 1. CNP_NM(지역명)별로 그룹화
-  const grouped = data.reduce((acc, item) => {
-    if (!acc[item.CNP_NM]) acc[item.CNP_NM] = [];
-    acc[item.CNP_NM].push(item);
-    return acc;
-  }, {});
 
-  return (
-    <table className="min-w-full border">
-      <caption className="caption-top">공급 세부내역</caption>
-      <thead>
-        <tr>
-          <th className="border px-4 py-2">시군구명(CNP_NM)</th>
-          <th className="border px-4 py-2">공급호수(LTR_SPL_RMNO)</th>
-          <th className="border px-4 py-2">주소(DNG_HS_ADR)</th>
-          <th className="border px-4 py-2 text-right">공급세대수(QUP_CNT)</th>
-        </tr>
-      </thead>
-      <tbody>
-        {Object.entries(grouped).map(([region, items]) =>
-          items.map((item, idx) => (
-            <tr key={region + idx}>
-              {/* 첫 행에만 rowSpan 적용해서 '인천광역시' 등 지역명 한 번만 출력 */}
-              {idx === 0 && (
-                <td rowSpan={items.length} className="border px-4 py-2 font-bold align-middle bg-gray-50">
-                  {region}
-                </td>
-              )}
-              <td className="border px-4 py-2">{item.LTR_SPL_RMNO}</td>
-              <td className="border px-4 py-2">{item.DNG_HS_ADR}</td>
-              <td className="border px-4 py-2 text-right">{item.QUP_CNT}</td>
-            </tr>
-          ))
-        )}
-      </tbody>
-    </table>
-  );
-}
 export default AnnouncementDetailTable;
