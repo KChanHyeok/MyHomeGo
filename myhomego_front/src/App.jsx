@@ -18,7 +18,6 @@ export default function App() {
         <Route path="/usermain" element={<UserMainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/chatGpt" element={<ChatGpt />} />
         <Route element={<Layout />}>
           <Route path="/chatGpt" element={<ChatGpt />} />
           <Route path="/announcementList" element={<AnnouncementList />} />
