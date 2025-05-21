@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './sidebar.module.css';
-// import chart from './chart';
 
 const menuItems = [
   {
@@ -43,9 +42,6 @@ const Sidebar = ({ children }) => {
             </button>
           ))}
         </nav>
-      <div>
-        {/* <chart /> */}
-      </div>
       </div>
       <button
         className={styles.logoutButton}
