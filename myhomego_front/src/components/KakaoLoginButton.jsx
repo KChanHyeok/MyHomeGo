@@ -12,7 +12,7 @@ const KakaoLoginButton = () => {
 
   const handleLogin = () => {
     window.Kakao.Auth.login({
-      scope: "profile_nickname,account_email",
+      scope: "profile_nickname, account_email",
       success: function (authObj) {
         // 백엔드에 accessToken 전달
         fetch("http://localhost:8080/auth/kakao", {
@@ -24,7 +24,7 @@ const KakaoLoginButton = () => {
           .then((data) => {
             localStorage.setItem("jwt", data.token);
             // 로그인 페이지로 이동
-            navigate("/login");
+            navigate("/");
           });
       },
       fail: function (err) {
