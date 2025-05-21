@@ -4,8 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+<<<<<<< HEAD
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.example.myhomego_back.jwt.JwtAuthFilter;
+=======
+import org.springframework.web.cors.CorsConfiguration;
+>>>>>>> e260754f27411bf58c1c48ebfc92ed4800109b53
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.Customizer;
@@ -31,13 +35,18 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())) // ✅ CORS 허용
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
+                .requestMatchers(
                                 "/api/user/register",
                                 "/api/user/login",
                                 "/api/user/check-email",
+<<<<<<< HEAD
                                 "/api/user/check-id")
                                 // "/api/user/get-user")
+=======
+                                "/api/chat/**")
+>>>>>>> e260754f27411bf58c1c48ebfc92ed4800109b53
                         .permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);;
