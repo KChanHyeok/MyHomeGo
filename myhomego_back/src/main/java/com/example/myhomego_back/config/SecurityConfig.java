@@ -1,10 +1,13 @@
 package com.example.myhomego_back.config;
+
 import com.example.myhomego_back.jwt.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.myhomego_back.common.OAuth2SuccessHandler;
 import com.example.myhomego_back.jwt.JwtAuthFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,7 +31,7 @@ public class SecurityConfig {
 
     // 보안 정책 설정
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, OAuth2SuccessHandler oauth2successHandler) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
@@ -42,7 +45,11 @@ public class SecurityConfig {
                                 "/api/chat/**")
                         .permitAll()
                         .anyRequest().authenticated()
-                ).addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);;
+                ).addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2Login -> oauth2Login
+                .loginPage("/api/user/register") // 사용자를 로그인 페이지로 리다이렉트
+                .successHandler(oauth2successHandler) // 로그인 성공 시의 핸들러로 oAuth2SuccessHandler를 사용
+            );
 
         return http.build();
     }
