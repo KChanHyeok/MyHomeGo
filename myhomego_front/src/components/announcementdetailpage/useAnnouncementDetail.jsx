@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_KEY = 'ggKSFIY8e2VWWAtrAJR9X0tpHxfG5xL/viLjukhurELWWaVwnS9PVma70rnMTdytv8mG1uY4qL59cWOMPmxrWA==';
+const API_KEY = '6NyqkFLFWxC9mkkEU6ntshrtBhh+77ivcPNYzUql7auzUuyQJAX1p8a8avnSHv4ElqjrpsqQkQOuFfmInwyF5A==';
 
 export default function useAnnouncementDetail(panId, params) {
   const [detail, setDetail] = useState(null);
@@ -23,6 +23,7 @@ export default function useAnnouncementDetail(panId, params) {
           dsEtcInfo: res.data[1]?.dsEtcInfo || [],
           dsAhflInfo: res.data[1]?.dsAhflInfo || [],
           dsSbdAhfl: res.data[1]?.dsSbdAhfl || [],
+
         });
       } catch (e) {
         setDetail(null);

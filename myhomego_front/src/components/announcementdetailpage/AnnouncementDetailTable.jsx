@@ -1,6 +1,7 @@
 import React from 'react';
 import './AnnoucementDetail.css';
 import { Link } from 'react-router-dom';
+import back from '../../../public/images/back.png';
 import {
   Table,
   TableBody,
@@ -31,11 +32,15 @@ function AnnouncementDetailTable({ detail, spl }) {
   };
   return (
     <div className="detail-table-wrap">
-      <Link to="/announcementlist" className="text-blue-500 underline mb-4 inline-block">← 목록으로 돌아가기</Link>
-      <h2 className="text-2xl font-bold mb-4">공고 상세</h2>
 
+      <h2 className="text-2xl font-bold mb-4">공고 상세</h2>
+      <div className="flex justify-end">
+        <Link to="/announcementlist" className="mr-4">
+          <img src={back} alt="goback" className="back" />
+        </Link>
+      </div>
       {/* 기본 정보 섹션 */}
-      <div className="detail-section detail-section--summary">
+      <div className="detail-section detail-section--summary w-full">
         {/* 상단 요약 정보 */}
         <div className="detail-row2">
           <div className="detail-title">{main?.PAN_NM || '-'}</div>
@@ -57,57 +62,6 @@ function AnnouncementDetailTable({ detail, spl }) {
             )}
           </li>
         </ul>
-
-        {/* 첨부파일 섹션 */}
-        {files.length > 0 && (
-          <div className="bbsV_atchmnfl">
-            {/* 공고문 섹션 */}
-            {noticeFiles.length > 0 && (
-              <dl className="col_red">
-                <dt className="pc_red">공고문</dt>
-                <dd>
-                  <ul className="bbsV_link file">
-                    {noticeFiles.map((file, idx) => (
-                      <li key={idx} className="file-bullet notice-file">
-                        <span className="file-star">★</span>
-                        <a
-                          href={file.AHFL_URL}
-                          className="file-link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {file.CMN_AHFL_NM}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
-              </dl>
-            )}
-            {/* 다운로드(기타) 섹션 */}
-            {otherFiles.length > 0 && (
-              <dl>
-                <dt className="pc_down">다운로드</dt>
-                <dd>
-                  <ul className="bbsV_link file">
-                    {otherFiles.map((file, idx) => (
-                      <li key={idx} className="file-bullet">
-                        <a
-                          href={file.AHFL_URL}
-                          className="file-link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {file.CMN_AHFL_NM}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
-              </dl>
-            )}
-          </div>
-        )}
       </div>
 
       <h3 className="detail-subtitle">공급 정보</h3>
@@ -152,6 +106,80 @@ function AnnouncementDetailTable({ detail, spl }) {
           )}
         </TableBody>
       </Table>
+      {/* 첨부파일 섹션 */}
+      <div className="detail-section">
+        <h3 className="detail-subtitle">첨부파일</h3>
+        <div className="detail-grid">
+          {/* 공고문 파일 섹션 */}
+          {noticeFiles.length > 0 && (
+            <div className="detail-row">
+              <div className="detail-label">공고문</div>
+              <div className="detail-content">
+                <ul className="bbsV_link file">
+                  {noticeFiles.map((file, idx) => (
+                    <li key={idx} className="file-bullet notice-file flex items-center gap-2">
+                      <a
+                        href={file.AHFL_URL}
+                        className="file-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {file.CMN_AHFL_NM}
+                      </a>
+                      <a
+                        href={file.AHFL_URL}
+                        download
+                        className="ml-1 px-2 py-1 text-xs bg-gray-200 rounded hover:bg-gray-300 transition"
+                        title="다운로드"
+                      >
+                        다운로드
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+          {/* 기타 파일 섹션 */}
+          {otherFiles.length > 0 && (
+            <div className="detail-row">
+              <div className="detail-label">기타 다운로드</div>
+              <div className="detail-content">
+                <ul className="bbsV_link file">
+                  {otherFiles.map((file, idx) => (
+                    <li key={idx} className="file-bullet flex items-center gap-2">
+                      <a
+                        href={file.AHFL_URL}
+                        className="file-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {file.CMN_AHFL_NM}
+                      </a>
+                      <a
+                        href={file.AHFL_URL}
+                        download
+                        className="ml-1 px-2 py-1 text-xs bg-gray-200 rounded hover:bg-gray-300 transition"
+                        title="다운로드"
+                      >
+                        다운로드
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+          {/* 파일이 없을 때 안내문구 */}
+          {files.length === 0 && (
+            <div className="detail-row">
+              <div className="detail-label">첨부파일</div>
+              <div className="detail-content">첨부파일이 없습니다.</div>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* 서류접수기간 섹션 */}
       <div className="detail-section">
         <h3 className="detail-subtitle">접수 일정</h3>
@@ -165,8 +193,8 @@ function AnnouncementDetailTable({ detail, spl }) {
             <div className="detail-content">{main?.dsSplScdl?.[0]?.PPR_ACP_ST_DT || '이 데이터는 제공되지 않습니다.'} ~ {main?.dsSplScdl?.[0]?.PPR_ACP_CLSG_DT || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
           <div className="detail-row">
-            <div className="detail-label">서류대상자 발표일</div>
-            <div className="detail-content">{main?.dsSplScdl?.[0]?.PPR_SBM_OPE_ANC_DT || '이 데이터는 제공되지 않습니다.'}</div>
+            <div className="detail-label">서류대상자 발표일 </div>
+            <div className="detail-content ml-4">{main?.dsSplScdl?.[0]?.PPR_SBM_OPE_ANC_DT || '이 데이터는 제공되지 않습니다.'}</div>
           </div>
           <div className="detail-row">
             <div className="detail-label">당첨자 발표</div>
@@ -223,7 +251,6 @@ function AnnouncementDetailTable({ detail, spl }) {
           </div>
         </div>
       </div>
-
     </div>
   );
 }
