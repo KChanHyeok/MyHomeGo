@@ -1,6 +1,6 @@
 import InfoCard from "@/components/main_page/infoCard";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/apis/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 const cardList = [
