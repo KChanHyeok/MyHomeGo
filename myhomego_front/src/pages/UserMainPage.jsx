@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import KakaoLoginButton from "@/components/KakaoLoginButton";
 
 export default function MemberMainPage() {
   const navigate = useNavigate();
@@ -11,14 +12,13 @@ export default function MemberMainPage() {
       style={{ backgroundImage: `url('/images/backgroundImg3.png')` }}
     >
       <div className="flex flex-col items-center justify-start min-h-screen pt-6 gap-10">
-        {/* 로고 */}
+        
         <img
           src="/images/mainLogo.png"
           alt="앱 로고"
           className="w-1/5"
         />
 
-        {/* 버튼만 큼직하게 배치 */}
         <div className="flex flex-col items-center gap-6">
           <Button
             className="w-80 h-14 text-lg bg-[#3097db] hover:bg-[#5cbfb7] text-white font-semibold cursor-pointer"
@@ -32,6 +32,8 @@ export default function MemberMainPage() {
           >
             회원가입
           </Button>
+
+          <KakaoLoginButton />
         </div>
       </div>
     </div>

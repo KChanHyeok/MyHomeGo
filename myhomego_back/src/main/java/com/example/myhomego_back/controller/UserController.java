@@ -7,6 +7,8 @@ import com.example.myhomego_back.entity.UserEntity;
 import com.example.myhomego_back.jwt.JwtUtil;
 import com.example.myhomego_back.repository.UserRepository;
 import com.example.myhomego_back.service.UserService;
+import com.example.myhomego_back.entity.KakaoUserEntity;
+import com.example.myhomego_back.repository.KakaoUserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserService userService;
     private final JwtUtil jwtUtil;
+    private final KakaoUserRepository kakaoUserRepository;
 
     // 회원가입
     @PostMapping("/register")
@@ -66,18 +69,25 @@ public class UserController {
             String token = authHeader.replace("Bearer ", "");
             String userId = jwtUtil.getUserIdFromToken(token);
 
+            // 1. 일반 사용자 조회
             UserEntity user = userService.getUserById(userId);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+            if (user != null) {
+                Map<String, Object> result = new HashMap<>();
+                result.put("userId", user.getUserId());
+                result.put("userName", user.getUserName());
+                return ResponseEntity.ok(result);
             }
 
-            // DTO나 Map 형태로 응답
-            Map<String, Object> result = new HashMap<>();
-            result.put("userId", user.getUserId());
-            result.put("userName", user.getUserName());
+            // 2. 카카오 사용자 조회
+            KakaoUserEntity kakaoUser = kakaoUserRepository.findByKakaoId(userId);
+            if (kakaoUser != null) {
+                Map<String, Object> result = new HashMap<>();
+                result.put("userId", kakaoUser.getKakaoId());
+                result.put("userName", kakaoUser.getKakaoName());
+                return ResponseEntity.ok(result);
+            }
 
-            return ResponseEntity.ok(result);
-
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 유효하지 않습니다.");
         }
