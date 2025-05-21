@@ -1,6 +1,7 @@
 import InfoCard from "@/components/main_page/infoCard";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const cardList = [
   { image: "/images/Youth.png", link: "" },
@@ -10,6 +11,7 @@ const cardList = [
 
 export default function MainPage() {
   const [userName, setUserName] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -28,6 +30,18 @@ export default function MainPage() {
         console.error("사용자 정보 불러오기 실패:", err);
       });
   }, []);
+
+  const handleCardClick = (link) => {
+    if (!userName) {
+      alert("로그인이 필요한 서비스입니다!");
+      navigate("/usermain");
+      return;
+    }
+
+    if (link) {
+      navigate(link); // 추후 링크 연결 시
+    }
+  };
 
   return (
     <div
@@ -61,7 +75,8 @@ export default function MainPage() {
 
       <div className="flex flex-row justify-center items-start gap-24 w-full max-w-5x">
         {cardList.map((card, idx) => (
-          <div key={idx} className={idx === 1 ? "mt-10" : ""}>
+          <div key={idx} className={idx === 1 ? "mt-10" : ""}
+            onClick={() => handleCardClick(card.link)}>
             <InfoCard key={idx} image={card.image} link={card.link} />
           </div>
         ))}
