@@ -23,7 +23,7 @@ export default function useAnnouncementDetail(panId, params) {
           dsEtcInfo: res.data[1]?.dsEtcInfo || [],
           dsAhflInfo: res.data[1]?.dsAhflInfo || [],
           dsSbdAhfl: res.data[1]?.dsSbdAhfl || [],
-          dsSbd: res.data[1]?.dsSbd || [],
+
         });
       } catch (e) {
         setDetail(null);

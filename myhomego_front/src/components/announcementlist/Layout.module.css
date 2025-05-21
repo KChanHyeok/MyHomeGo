@@ -1,5 +1,4 @@
 .layout {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: #EFFFF8;
@@ -20,6 +19,7 @@
   padding: 0 1rem;
 }
 
+/* 핵심! content를 왼쪽에서 290px(=240+50)만큼 띄움 */
 .content {
   flex: 1;
   margin-left: 280px;

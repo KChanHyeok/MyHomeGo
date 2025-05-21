@@ -26,8 +26,6 @@ function AnnouncementDetailData() {
 
   return (
     <div>
-      <Link to="/announcementlist" className="text-blue-500 underline mb-4 inline-block">← 목록으로 돌아가기</Link>
-      <h2 className="text-2xl font-bold mb-4">공고 상세</h2>
       <AnnouncementDetailTable detail={combinedDetail} spl={spl} />
     </div>
   );
