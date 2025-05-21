@@ -8,6 +8,8 @@ import MainPage from "./pages/MainPage";
 import AnnouncementList from "./pages/AnnouncementList";
 import Layout from "./components/announcementlist/Layout";
 import AnnouncementDetailData from "./pages/AnnoucementDetailData";
+import PrivateRoute from "./components/PrivateRoute";
+
 
 
 export default function App() {
@@ -19,10 +21,32 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<Layout />}>
-          <Route path="/chatGpt" element={<ChatGpt />} />
-          <Route path="/announcementList" element={<AnnouncementList />} />
-          <Route path="/announcement/:panId" element={<AnnouncementDetailData/>} />
+          <Route
+            path="/chatGpt"
+            element={
+              <PrivateRoute>
+                <ChatGpt />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/announcementList"
+            element={
+              <PrivateRoute>
+                <AnnouncementList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/announcement/:panId"
+            element={
+              <PrivateRoute>
+                <AnnouncementDetailData />
+              </PrivateRoute>
+            }
+          />
         </Route>
+
       </Routes>
     </BrowserRouter>
   );
