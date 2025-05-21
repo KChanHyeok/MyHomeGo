@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AnnouncementSidebar from '../components/announcementlist/Sidebar';
 import AnnouncementFilterBar from '../components/announcementlist/AnnouncementFilterBar';
 import AnnouncementTable from '../components/announcementlist/AnnouncementTable';
-import axios from 'axios';
+import axios from "axios";
 import { getLhAnnouncements } from '../components/announcementlist/api';
 
 import {

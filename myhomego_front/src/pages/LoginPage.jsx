@@ -1,7 +1,7 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "@/apis/axiosInstance";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -27,7 +27,7 @@ export default function LoginPage() {
       localStorage.setItem("accessToken", token);
 
       setError("");
-      alert("로그인 성공");
+      // alert("로그인 성공");
       navigate("/");
     } catch (err) {
       console.error("로그인 실패:", err);
