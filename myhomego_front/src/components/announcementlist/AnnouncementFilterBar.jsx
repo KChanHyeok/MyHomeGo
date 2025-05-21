@@ -39,11 +39,15 @@ function AnnouncementFilterBar(props) {
   });
 
   const handleFilter = () => {
-    // 날짜 타입이 선택되지 않았으면 날짜 필터는 제거
+    // "전체" 선택 시 빈 문자열로 변환
     const filteredValues = {
-      ...filters,
+      type: filters.type === "전체" ? "" : filters.type,
+      region: filters.region === "전체" ? "" : filters.region,
+      status: filters.status === "전체" ? "" : filters.status,
+      dateType: filters.dateType === "전체" ? "" : filters.dateType,
       startDate: filters.dateType ? filters.startDate : '',
-      endDate: filters.dateType ? filters.endDate : ''
+      endDate: filters.dateType ? filters.endDate : '',
+      title: filters.title
     };
     onFilter(filteredValues);
   };
@@ -59,6 +63,7 @@ function AnnouncementFilterBar(props) {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
+              <SelectItem value="전체">전체</SelectItem>
               <SelectItem value="매입임대">매입임대</SelectItem>
               <SelectItem value="전세임대">전세임대</SelectItem>
               <SelectItem value="행복주택">행복주택</SelectItem>
@@ -76,6 +81,7 @@ function AnnouncementFilterBar(props) {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
+              <SelectItem value="전체">전체</SelectItem>
               <SelectItem value="서울특별시">서울특별시</SelectItem>
               <SelectItem value="부산광역시">부산광역시</SelectItem>
               <SelectItem value="대구광역시">대구광역시</SelectItem>
@@ -106,6 +112,7 @@ function AnnouncementFilterBar(props) {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
+              <SelectItem value="전체">전체</SelectItem>
               <SelectItem value="공고중">공고중</SelectItem>
               <SelectItem value="접수중">접수중</SelectItem>
             </SelectGroup>
@@ -120,6 +127,7 @@ function AnnouncementFilterBar(props) {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
+              <SelectItem value="전체">전체 기간</SelectItem>
               <SelectItem value="게시일">게시일</SelectItem>
               <SelectItem value="마감일">마감일</SelectItem>
             </SelectGroup>
@@ -128,7 +136,7 @@ function AnnouncementFilterBar(props) {
 
         <div className="flex gap-2">
           <Popover>
-            <PopoverTrigger disabled={!filters.dateType} asChild>
+            <PopoverTrigger disabled={!filters.dateType}>
               <Button
                 variant={"outline"}
                 className={cn(
@@ -156,7 +164,7 @@ function AnnouncementFilterBar(props) {
           </Popover>
           <span>~</span>
           <Popover>
-            <PopoverTrigger disabled={!filters.dateType} asChild>
+            <PopoverTrigger disabled={!filters.dateType}>
               <Button
                 variant={"outline"}
                 className={cn(

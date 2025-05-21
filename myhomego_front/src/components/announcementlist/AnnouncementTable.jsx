@@ -15,7 +15,7 @@ function AnnouncementTable(props) {
     <div className="rounded-md border">
       <Table className="text-gray-800">
         <TableHeader>
-          <TableRow className="bg-[#ECFFF7]">
+          <TableRow className="bg-[#5DC1B7]">
             <TableHead>번호</TableHead>
             <TableHead>지역</TableHead>
             <TableHead>공고명</TableHead>

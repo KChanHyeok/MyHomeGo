@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './sidebar.module.css';
+import { Button } from "@/components/ui/button"
 
 const menuItems = [
   {
@@ -43,15 +44,15 @@ const Sidebar = ({ children }) => {
           ))}
         </nav>
       </div>
-      <button
-        className={styles.logoutButton}
+      <Button
+        className="bg-[#5DC1B7] text-black px-4 py-1 rounded cursor-pointer"
         onClick={() => {
           localStorage.removeItem('token');
           window.location.href = '/login';
         }}
       >
         로그아웃
-      </button>
+      </Button>
     </div>
   );
 };
