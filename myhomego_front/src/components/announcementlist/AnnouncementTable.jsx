@@ -13,7 +13,7 @@ function AnnouncementTable(props) {
   const { announcements } = props;
   return (
     <div className="rounded-md border">
-      <Table>
+      <Table className="text-gray-800">
         <TableHeader>
           <TableRow className="bg-[#ECFFF7]">
             <TableHead>번호</TableHead>

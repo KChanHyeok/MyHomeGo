@@ -1,14 +1,13 @@
 .header {
   background-color: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  height: 48px;
-  position: fixed;
+  height: 200px;
 }
 
 .logoImg {
-  height: 40px;
+  height: 100px;
   width: auto;
-  max-height: 40px;
+  max-height: 100px;
   object-fit: contain;
 }
 
@@ -20,7 +19,7 @@
 }
 
 .logo {
-  height: 40px;
+  height: 100px;
 }
 
 .logoLink {

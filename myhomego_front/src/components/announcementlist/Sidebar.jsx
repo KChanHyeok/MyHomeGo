@@ -13,7 +13,7 @@ const menuItems = [
   },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ children }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -23,6 +23,7 @@ const Sidebar = () => {
 
   return (
     <div className={styles.sidebar}>
+      <div className={styles.header}>{children}</div>
       <div className={styles.contentContainer}>
         <nav className={styles.navMenu}>
           {menuItems.map((item) => (
