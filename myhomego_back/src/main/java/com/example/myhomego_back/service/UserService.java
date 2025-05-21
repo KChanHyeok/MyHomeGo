@@ -69,4 +69,12 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    public UserEntity getUserById(String userId) {
+        return userRepository.findByUserId(userId);
+    }
+
+    public boolean existsByUserId(String userId) {
+        return userRepository.existsByUserId(userId);
+    }
+
 }

@@ -51,4 +51,18 @@ public class JwtUtil {
             return false;
         }
     }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String getUserIdFromToken(String token) {
+        Claims claims = getClaims(token);
+        return claims.getSubject(); // 로그인 시 createToken(userId)로 넣은 값
+    }
+
 }

@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserMainPage from "./pages/UserMainPage";
 import LoginPage from "./pages/LoginPage";
@@ -16,10 +15,9 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/userMain" element={<UserMainPage />} />
+        <Route path="/usermain" element={<UserMainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/chatGpt" element={<ChatGpt />} />
         <Route element={<Layout />}>
           <Route path="/chatGpt" element={<ChatGpt />} />
           <Route path="/announcementList" element={<AnnouncementList />} />
