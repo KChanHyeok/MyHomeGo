@@ -4,9 +4,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const cardList = [
-  { image: "/images/Youth.png", link: "" },
-  { image: "/images/subscription.png", link: "" },
-  { image: "/images/newlyweds.png", link: "" },
+  { image: "/images/Youth.png", link: "/announcementList?search=청년" },
+  { image: "/images/subscription.png", link: "/announcementList" },
+  { image: "/images/newlyweds.png", link: "/announcementList?search=신혼" },
 ];
 
 export default function MainPage() {
