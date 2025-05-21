@@ -13,21 +13,20 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-
 @RestController
 @RequestMapping("/api/chat")  
 @RequiredArgsConstructor
 public class ChatController {
-
+    
     private final ChatSessionRepository sessionRepo;
     private final ChatMessageRepository messageRepo;
     private final GptService gptService;
-
+    
     @PostMapping("/session")
     public ResponseEntity<ChatSessionEntity> createSession() {
         ChatSessionEntity session = sessionRepo.save(ChatSessionEntity.createNow());
         return ResponseEntity.ok(session);
-}
+    }
 
     @PostMapping("/{sessionId}/message")
     public GptResponse send(
