@@ -5,16 +5,28 @@ const KakaoLoginButton = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!window.Kakao?.isInitialized()) {
-      window.Kakao.init(import.meta.env.VITE_KAKAO_JS_KEY);
-    }
+    // Kakao SDK 동적 로드
+    const script = document.createElement("script");
+    script.src = "https://developers.kakao.com/sdk/js/kakao.js";
+    script.async = true;
+    script.onload = () => {
+      if (window.Kakao && !window.Kakao.isInitialized()) {
+        window.Kakao.init(import.meta.env.VITE_KAKAO_JS_KEY);
+        console.log("Kakao SDK 로드 및 초기화 완료");
+      }
+    };
+    document.head.appendChild(script);
   }, []);
 
   const handleLogin = () => {
+    if (!window.Kakao) {
+      console.error("Kakao SDK가 아직 로드되지 않았습니다.");
+      return;
+    }
+
     window.Kakao.Auth.login({
       scope: "profile_nickname, account_email",
       success: function (authObj) {
-        // 백엔드에 accessToken 전달
         fetch("http://localhost:8080/auth/kakao", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -22,8 +34,7 @@ const KakaoLoginButton = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            localStorage.setItem("jwt", data.token);
-            // 로그인 페이지로 이동
+            localStorage.setItem("accessToken", data.token);
             navigate("/");
           });
       },

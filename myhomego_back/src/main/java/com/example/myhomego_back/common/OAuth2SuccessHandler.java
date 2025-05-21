@@ -33,12 +33,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         try {
             // KakaoLoginService를 이용하여 로그인 처리 및 JWT 발급
-            String jwtToken = kakaoLoginService.kakaoLogin(code);
+            // String jwtToken = kakaoLoginService.kakaoLogin(code);
 
             // JWT 토큰을 쿼리 파라미터로 메인 페이지에 리다이렉트
-            String redirectUrl = "http://localhost:5173/?token=" + jwtToken;
+            // String redirectUrl = "http://localhost:5173/?token=" + jwtToken;
 
-            response.sendRedirect(redirectUrl);
+            // response.sendRedirect(redirectUrl);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "OAuth2 login failed");
         }

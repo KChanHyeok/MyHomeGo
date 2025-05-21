@@ -15,7 +15,12 @@ export default function MainPage() {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (!token) return;
+    // console.log("accessToken:", token);
+
+    if (!token) {
+      console.warn("accessToken이 없음. API 요청 안 함.");
+      return;
+    }
 
     axios
       .get("http://localhost:8080/api/user/get-user", {
@@ -24,12 +29,14 @@ export default function MainPage() {
         },
       })
       .then((res) => {
+        // console.log("✅ 사용자 응답:", res.data);
         setUserName(res.data.userName);
       })
       .catch((err) => {
         console.error("사용자 정보 불러오기 실패:", err);
       });
   }, []);
+
 
   const handleCardClick = (link) => {
     if (!userName) {
