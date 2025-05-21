@@ -29,20 +29,26 @@ export default function ChatGpt() {
     }
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (inputMessage.trim()) {
       setMessages([...messages, { role: "user", content: inputMessage }]);
       setIsGenerating(true);
+      setInputMessage("");
 
-      const airMessage = inputMessage;
+      const url = `http://localhost:8080/api/chat/1/message`;
 
-      setTimeout(() => {
-        setIsGenerating(false);
-        setMessages((prev) => [...prev, { role: "ai", content: airMessage }]);
-      }, 1000);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: inputMessage }),
+      });
+      const data = await response.json();
+      setIsGenerating(false);
+      setMessages((prev) => [...prev, { role: "ai", content: data.content }]);
     }
-    setInputMessage("");
   };
 
   const onKeyDown = (e) => {
