@@ -1,46 +1,84 @@
 import InfoCard from "@/components/main_page/infoCard";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const cardList = [
-  {
-    title: "청년 주거지원",
-    description: "청년을 위한 전세/월세 지원제도 안내",
-    image: "",
-  },
-  {
-    title: "청약 정보",
-    description: "공공/민영 청약과 행복주택 정보를 한눈에",
-    image: "",
-  },
-  {
-    title: "신혼부부 주거지원",
-    description: "신혼희망타운과 전세자금지원 정보 제공",
-    image: "",
-  },
+  { image: "/images/Youth.png", link: "/announcementList?search=청년" },
+  { image: "/images/subscription.png", link: "/announcementList" },
+  { image: "/images/newlyweds.png", link: "/announcementList?search=신혼" },
 ];
 
 export default function MainPage() {
+  const [userName, setUserName] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+
+    axios
+      .get("http://localhost:8080/api/user/get-user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUserName(res.data.userName);
+      })
+      .catch((err) => {
+        console.error("사용자 정보 불러오기 실패:", err);
+      });
+  }, []);
+
+  const handleCardClick = (link) => {
+    if (!userName) {
+      alert("로그인이 필요한 서비스입니다!");
+      navigate("/usermain");
+      return;
+    }
+
+    if (link) {
+      navigate(link); // 추후 링크 연결 시
+    }
+  };
+
   return (
     <div
       className="min-h-screen w-full bg-gradient-to-b from-white to-blue-50 
                  bg-[url('/images/backgroundImg3.png')] bg-cover bg-center 
                  flex flex-col items-center py-12 px-4"
     >
-      <img src="/images/mainLogo.png" alt="내집GO 로고" className="w-40 mb-6" />
+      <img src="/images/mainLogo.png" alt="내집GO 로고" className="w-1/5" />
 
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-12 leading-relaxed">
-        청년과 신혼부부를 위한 <br className="md:hidden" />
-        맞춤형 주거 정보, 한눈에 확인하세요
-      </h1>
+      <div className="text-left mb-12 leading-loose -mt-6 text-center">
+        {userName ? (
+          <>
+            <div className="text-2xl md:text-3xl font-bold text-gray-800">
+              <span>{userName}</span>님 환영합니다!
+            </div>
+            <div className="text-2xl md:text-3xl font-bold text-gray-800">
+              청년과 신혼부부를 위한 맞춤형 주거 정보, 한눈에 확인하세요
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="text-2xl md:text-3xl font-bold text-gray-800">
+              청년과 신혼부부를 위한
+            </div>
+            <div className="text-2xl md:text-3xl font-bold text-gray-800">
+              맞춤형 주거 정보, 한눈에 확인하세요
+            </div>
+          </>
+        )}
+      </div>
 
-      <div className="flex flex-row justify-center items-start gap-6 w-full max-w-5xl">
+      <div className="flex flex-row justify-center items-start gap-24 w-full max-w-5x">
         {cardList.map((card, idx) => (
-          <InfoCard
-            key={idx}
-            title={card.title}
-            description={card.description}
-            image={card.image}
-          />
+          <div key={idx} className={idx === 1 ? "mt-10" : ""}
+            onClick={() => handleCardClick(card.link)}>
+            <InfoCard key={idx} image={card.image} link={card.link} />
+          </div>
         ))}
       </div>
     </div>

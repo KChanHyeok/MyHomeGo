@@ -13,26 +13,34 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
     private final JwtUtil jwtUtil;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // Authorization: Bearer <token>
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+        System.out.println("요청 URI: " + request.getRequestURI());
+        System.out.println("요청 Method: " + request.getMethod());
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            System.out.println("OPTIONS 요청 - 허용");
+            return true;
+        }
+
         String authHeader = request.getHeader("Authorization");
+        System.out.println("Authorization 헤더: " + authHeader);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("인증 실패 - Authorization 헤더 없음 또는 잘못된 형식");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
 
-        String token = authHeader.substring(7); // "Bearer " 제거
-
+        String token = authHeader.replace("Bearer ", "");
         if (!jwtUtil.isValidToken(token)) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            System.out.println("인증 실패 - 유효하지 않은 토큰");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }
 
-        // 유효한 경우, 사용자 ID를 request 속성에 저장 (컨트롤러에서 꺼내 쓸 수 있도록)
-        String userId = jwtUtil.extractUserId(token);
-        request.setAttribute("userId", userId);
-
+        System.out.println("토큰 인증 성공");
         return true;
     }
+
 }

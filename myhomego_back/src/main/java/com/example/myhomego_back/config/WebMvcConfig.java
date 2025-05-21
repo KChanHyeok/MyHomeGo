@@ -13,9 +13,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtAuthInterceptor)
-                .addPathPatterns("/api/user/**")
-                .excludePathPatterns("/api/user/login", "/api/user/register", "/api/user/check-email");
+        // registry.addInterceptor(jwtAuthInterceptor)
+        //         .addPathPatterns("/api/user/**")
+        //         .excludePathPatterns("/api/user/login", "/api/user/register", "/api/user/check-email");
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")  // 모든 경로
+                .allowedOrigins("http://localhost:5173") // 프론트엔드 주소
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(false);
     }
 
 }
