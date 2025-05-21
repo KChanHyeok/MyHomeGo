@@ -12,10 +12,10 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/userMain" element={<UserMainPage />} />
+        <Route path="/usermain" element={<UserMainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/chatGpt" element={<ChatGpt />} />
+        <Route path="/chatgpt" element={<ChatGpt />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,7 +1,6 @@
 // src/pages/RegisterPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./RegisterPage.css";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -55,26 +54,50 @@ export default function RegisterPage() {
     }
   };
 
-
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url("/images/backgroundImg3.png")` }}>
-      <h2 className="text-2xl mb-6">회원가입</h2>
-      <div className="flex flex-col gap-3 w-72">
-        <Input name="id" placeholder="아이디" onChange={handleChange} />
-        <Input name="email" placeholder="이메일" onChange={handleChange} />
-        <Input type="password" name="password" placeholder="비밀번호" onChange={handleChange} />
-        <Input type="password" name="confirmPassword" placeholder="비밀번호 확인" onChange={handleChange} />
-        <Input name="name" placeholder="이름" onChange={handleChange} />
-        <Input name="phone" placeholder="전화번호" onChange={handleChange} />
-        <Button
-          disabled
-          className="bg-[#FAE100] text-black font-bold hover:bg-[#f5d700] w-72"
-        >
-          카카오톡으로 가입
-        </Button>
+    <div
+      className="relative min-h-screen w-full bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url("/images/backgroundImg3.png")` }}
+    >
+      <div className="flex flex-col items-center justify-start min-h-screen">
+        {/* 로고 */}
+        <img
+          src="/images/mainLogo.png"
+          alt="내집GO 로고"
+          className="w-1/5"
+        />
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <Button onClick={handleRegister}>회원가입</Button>
+        {/* 회원가입 박스 */}
+        <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl px-10 py-8 w-[400px] lg:w-[450px]">
+          <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">회원가입</h2>
+
+          <div className="flex flex-col gap-3">
+            <Input name="id" placeholder="아이디" onChange={handleChange} />
+            <Input name="email" placeholder="이메일" onChange={handleChange} />
+            <Input type="password" name="password" placeholder="비밀번호" onChange={handleChange} />
+            <Input type="password" name="confirmPassword" placeholder="비밀번호 확인" onChange={handleChange} />
+            <Input name="name" placeholder="이름" onChange={handleChange} />
+            <Input name="phone" placeholder="전화번호" onChange={handleChange} />
+
+            
+
+            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
+            <Button
+              onClick={handleRegister}
+              className="bg-[#3097db] hover:bg-[#5cbfb7] text-white font-semibold cursor-pointer"
+            >
+              회원가입
+            </Button>
+
+            <Button
+              disabled
+              className="bg-[#FAE100] text-black font-bold hover:bg-[#f5d700] w-full cursor-not-allowed"
+            >
+              카카오톡으로 가입
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
