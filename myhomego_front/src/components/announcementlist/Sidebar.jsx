@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './sidebar.module.css';
+// import chart from './chart';
 
 const menuItems = [
   {
@@ -13,7 +14,7 @@ const menuItems = [
   },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ children }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -23,6 +24,7 @@ const Sidebar = () => {
 
   return (
     <div className={styles.sidebar}>
+      <div className={styles.header}>{children}</div>
       <div className={styles.contentContainer}>
         <nav className={styles.navMenu}>
           {menuItems.map((item) => (
@@ -41,6 +43,9 @@ const Sidebar = () => {
             </button>
           ))}
         </nav>
+      <div>
+        {/* <chart /> */}
+      </div>
       </div>
       <button
         className={styles.logoutButton}

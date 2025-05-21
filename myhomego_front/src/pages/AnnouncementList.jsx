@@ -256,7 +256,7 @@ const AnnouncementList = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">청약 공고 모음</h1>
+      <h1 className="text-2xl font-bold mb-4 mt-7">청약 공고 모음</h1>
       <div className="mb-6">
         <AnnouncementFilterBar onFilter={fetchAnnouncements} />
       </div>

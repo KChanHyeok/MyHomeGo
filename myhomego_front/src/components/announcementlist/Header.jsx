@@ -4,10 +4,10 @@ import styles from './Header.module.css';
 
 function Header() {
   return (
-    <header className="h-12 bg-white shadow-sm">
+    <header>
       <div className="flex items-center h-full px-6">
         <a href="/" className="flex items-center">
-          <div className="h-10">
+          <div className="h-25">
             <img src={logo} alt="MyHomeGo" className={styles.logoImg} />
           </div>
         </a>

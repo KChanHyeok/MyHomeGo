@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f3f4f6;
+  background-color: #EFFFF8;
 }
 
 .header {
@@ -10,24 +10,30 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  height: 64px;
+  height: 200px;
 }
 
 .main {
   display: flex;
   flex: 1;
-  margin-top: 64px;
+  margin-top: 0;
   padding: 0 1rem;
 }
 
 .content {
   flex: 1;
   margin-left: 280px;
-  padding: 1.5rem;
-  max-width: 1200px;
-  margin-right: auto;
+  padding: 0;
+  margin-right: 0;
   background-color: #fff;
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: margin-left 0.3s ease-in-out;
+}
+
+.contentInner {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }

@@ -7,13 +7,14 @@ import { Outlet } from 'react-router-dom';
 function Layout() {
   return (
     <div className={styles.layout}>
-      <header className={styles.header}>
-        <Header />
-      </header>
       <main className={styles.main}>
-        <AnnouncementSidebar />
+        <AnnouncementSidebar>
+          <Header />
+        </AnnouncementSidebar>
         <div className={styles.content}>
-          <Outlet />
+          <div className={styles.contentInner}>
+            <Outlet />
+          </div>
         </div>
       </main>
     </div>
