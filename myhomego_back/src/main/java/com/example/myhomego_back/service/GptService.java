@@ -1,6 +1,8 @@
-package com.example.myhomego_back.chat;
+package com.example.myhomego_back.service;
 
-import com.example.myhomego_back.chat.dto.*;
+import com.example.myhomego_back.dto.GptMessage;
+import com.example.myhomego_back.dto.GptRequest;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;

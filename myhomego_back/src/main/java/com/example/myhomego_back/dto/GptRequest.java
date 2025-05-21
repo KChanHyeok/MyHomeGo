@@ -1,4 +1,4 @@
-package com.example.myhomego_back.chat.dto;
+package com.example.myhomego_back.dto;
 
 import java.util.List;
 

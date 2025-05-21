@@ -1,4 +1,4 @@
-package com.example.myhomego_back.chat.dto;
+package com.example.myhomego_back.dto;
 
 public class GptMessage {
     private String role;

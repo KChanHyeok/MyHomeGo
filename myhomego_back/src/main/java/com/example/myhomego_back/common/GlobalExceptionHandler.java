@@ -1,4 +1,4 @@
-package com.example.myhomego_back.chat;
+package com.example.myhomego_back.common;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

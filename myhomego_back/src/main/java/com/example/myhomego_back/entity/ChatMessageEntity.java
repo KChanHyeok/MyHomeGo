@@ -1,4 +1,4 @@
-package com.example.myhomego_back.chat;
+package com.example.myhomego_back.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "ChatMessage")
 @Getter
 @NoArgsConstructor
-public class ChatMessage {
+public class ChatMessageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,7 @@ public class ChatMessage {
 
     @ManyToOne
     @JoinColumn(name = "session_id")
-    private ChatSession session;
+    private ChatSessionEntity session;
 
     private String role;
 
@@ -26,7 +26,7 @@ public class ChatMessage {
 
     private LocalDateTime timestamp;
 
-    public ChatMessage(ChatSession session, String role, String content, LocalDateTime timestamp) {
+    public ChatMessageEntity(ChatSessionEntity session, String role, String content, LocalDateTime timestamp) {
         this.session = session;
         this.role = role;
         this.content = content;

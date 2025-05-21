@@ -1,6 +1,11 @@
-package com.example.myhomego_back.chat;
+package com.example.myhomego_back.controller;
 
-import com.example.myhomego_back.chat.dto.GptResponse;
+import com.example.myhomego_back.dto.GptResponse;
+import com.example.myhomego_back.entity.ChatMessageEntity;
+import com.example.myhomego_back.entity.ChatSessionEntity;
+import com.example.myhomego_back.repository.ChatMessageRepository;
+import com.example.myhomego_back.repository.ChatSessionRepository;
+import com.example.myhomego_back.service.GptService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +24,8 @@ public class ChatController {
     private final GptService gptService;
 
     @PostMapping("/session")
-    public ResponseEntity<ChatSession> createSession() {
-        ChatSession session = sessionRepo.save(ChatSession.createNow());
+    public ResponseEntity<ChatSessionEntity> createSession() {
+        ChatSessionEntity session = sessionRepo.save(ChatSessionEntity.createNow());
         return ResponseEntity.ok(session);
 }
 
@@ -30,19 +35,19 @@ public class ChatController {
             @RequestBody Map<String, String> body) {
 
         String prompt = body.get("prompt");
-        ChatSession session = sessionRepo.findById(sessionId).orElseThrow();
+        ChatSessionEntity session = sessionRepo.findById(sessionId).orElseThrow();
 
-        messageRepo.save(new ChatMessage(session, "user", prompt, LocalDateTime.now()));
+        messageRepo.save(new ChatMessageEntity(session, "user", prompt, LocalDateTime.now()));
 
         String gptReply = gptService.getResponse(prompt);
         LocalDateTime now = LocalDateTime.now();
-        messageRepo.save(new ChatMessage(session, "gpt", gptReply, now));
+        messageRepo.save(new ChatMessageEntity(session, "gpt", gptReply, now));
 
         return new GptResponse("gpt", gptReply, now);
     }
 
     @GetMapping("/{sessionId}/history")
-    public List<ChatMessage> getHistory(@PathVariable Long sessionId) {
+    public List<ChatMessageEntity> getHistory(@PathVariable Long sessionId) {
         return messageRepo.findBySessionIdOrderByTimestamp(sessionId);
     }
 }
