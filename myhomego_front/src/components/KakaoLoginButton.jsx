@@ -45,8 +45,14 @@ const KakaoLoginButton = () => {
   };
 
   return (
-    <button className="social-button" onClick={handleLogin}>
-      카카오톡으로 로그인
+    <button
+      onClick={handleLogin}
+    >
+      <img
+        src="/images/kakao_login_medium_wide.png"
+        alt="Kakao Logo"
+      />
+
     </button>
   );
 };
