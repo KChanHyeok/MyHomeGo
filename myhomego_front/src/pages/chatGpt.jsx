@@ -22,6 +22,19 @@ export default function ChatGpt() {
     }
   }, [messages]);
 
+  useEffect(() => {
+    setIsGenerating(true);
+    setTimeout(() => {
+      setMessages([
+        {
+          role: "ai",
+          content: "안녕하세요 저는 청약정보를 알려주는 AI챗봇입니다 궁금하신부분이 있으면 저에게 질문해주세요",
+        },
+      ]);
+      setIsGenerating(false);
+    }, 1000);
+  }, []);
+
   const handleInputChange = (e) => {
     if (e.code !== "Enter" && !isGenerating) {
       const input = e.target.value;
@@ -59,8 +72,8 @@ export default function ChatGpt() {
   };
 
   return (
-    <main className="flex h-screen w-full max-w-4xl flex-col items-center mx-auto border rounded-2xl">
-      <div className="flex-1 w-full overflow-y-auto py-6">
+    <main className="flex h-screen w-full flex-col border rounded-2xl">
+      <div className="flex-1 w-full overflow-y-auto">
         <ChatMessageList scrollRef={messagesContainerRef}>
           {messages &&
             messages.map((message, index) => (
@@ -91,16 +104,6 @@ export default function ChatGpt() {
             className="rounded-lg bg-background border-0 shadow-none focus-visible:ring-0"
           />
           <div className="flex items-center p-3 pt-0">
-            {/* <Button variant="ghost" size="icon">
-              <Paperclip className="size-4" />
-              <span className="sr-only">Attach file</span>
-            </Button>
-
-            <Button variant="ghost" size="icon">
-              <Mic className="size-4" />
-              <span className="sr-only">Use Microphone</span>
-            </Button> */}
-
             <Button disabled={!inputMessage || isGenerating} type="submit" size="sm" className="ml-auto gap-1.5">
               Send Message
               <CornerDownLeft className="size-3.5" />

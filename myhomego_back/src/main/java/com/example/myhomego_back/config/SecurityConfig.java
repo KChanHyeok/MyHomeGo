@@ -51,6 +51,7 @@ public class SecurityConfig {
                                 "/api/user/login",
                                 "/api/user/check-email",
                                 "/api/user/check-id",
+                                "/api/user/get-user",
                                 "/api/chat/**",
                                 "/auth/kakao")
                         .permitAll()

@@ -10,8 +10,6 @@ import Layout from "./components/announcementlist/Layout";
 import AnnouncementDetailData from "./pages/AnnoucementDetailData";
 import PrivateRoute from "./components/PrivateRoute";
 
-
-
 export default function App() {
   return (
     <BrowserRouter>
@@ -22,7 +20,7 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<Layout />}>
           <Route
-            path="/chatGpt"
+            path="/chatgpt"
             element={
               <PrivateRoute>
                 <ChatGpt />
@@ -46,9 +44,7 @@ export default function App() {
             }
           />
         </Route>
-
       </Routes>
     </BrowserRouter>
   );
 }
-
