@@ -9,9 +9,7 @@ export default function ChatGpt() {
   const [messages, setMessages] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
-  // const [inputMessage, setInputMessage] = useState("");
-
-  // const messagesRef = useRef(null);
+  const session = localStorage.getItem("chat_session");
   const formRef = useRef(null);
 
   const messagesContainerRef = useRef(null);
@@ -23,16 +21,21 @@ export default function ChatGpt() {
   }, [messages]);
 
   useEffect(() => {
-    setIsGenerating(true);
-    setTimeout(() => {
-      setMessages([
-        {
-          role: "ai",
-          content: "안녕하세요 저는 청약정보를 알려주는 AI챗봇입니다 궁금하신부분이 있으면 저에게 질문해주세요",
-        },
-      ]);
-      setIsGenerating(false);
-    }, 1000);
+    if (!session) {
+      createSession();
+      setIsGenerating(true);
+      setTimeout(() => {
+        setMessages([
+          {
+            role: "ai",
+            content: "안녕하세요 저는 청약정보를 알려주는 AI챗봇입니다 궁금하신부분이 있으면 저에게 질문해주세요",
+          },
+        ]);
+        setIsGenerating(false);
+      }, 1000);
+    } else {
+      getMessagehistory(session);
+    }
   }, []);
 
   const handleInputChange = (e) => {
@@ -49,8 +52,7 @@ export default function ChatGpt() {
       setIsGenerating(true);
       setInputMessage("");
 
-      const url = `http://localhost:8080/api/chat/1/message`;
-
+      const url = `${import.meta.env.VITE_URL}/chat/${session}/message`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -63,6 +65,27 @@ export default function ChatGpt() {
       setMessages((prev) => [...prev, { role: "ai", content: data.content }]);
     }
   };
+
+  async function createSession() {
+    const url = `${import.meta.env.VITE_URL}/chat/session`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt: inputMessage }),
+    });
+    const data = await response.json();
+    localStorage.setItem("chat_session", data.id);
+  }
+
+  async function getMessagehistory(session) {
+    const url = `${import.meta.env.VITE_URL}/chat/${session}/history`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const list = data.map((d) => ({ role: d.role, content: d.content }));
+    setMessages([...list]);
+  }
 
   const onKeyDown = (e) => {
     if (e.code === "Enter" && !isGenerating) {
