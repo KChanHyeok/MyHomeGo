@@ -196,12 +196,12 @@ export default function RegisterPage() {
               회원가입
             </Button>
 
-            <Button
+            {/* <Button
               disabled
               className="bg-[#FAE100] text-black font-bold hover:bg-[#f5d700] w-full cursor-not-allowed"
             >
               카카오톡으로 가입
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

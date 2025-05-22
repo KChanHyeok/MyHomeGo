@@ -45,14 +45,8 @@ const KakaoLoginButton = () => {
   };
 
   return (
-    <button
-      onClick={handleLogin}
-    >
-      <img
-        src="/images/kakao_login_medium_wide.png"
-        alt="Kakao Logo"
-      />
-
+    <button className="w-full cursor-pointer" onClick={handleLogin}>
+      <img className="w-full" src="/images/kakao_login_medium_wide.png" alt="Kakao Logo" />
     </button>
   );
 };
